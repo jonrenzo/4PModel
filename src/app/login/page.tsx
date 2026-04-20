@@ -61,7 +61,7 @@ export default function LoginPage() {
       }}
     >
       <div className="absolute inset-0 bg-yellow-900/60" />
-      <div className="relative flex w-full max-w-[900px] overflow-hidden rounded-3xl bg-[#efede6] shadow-2xl m-4">
+      <div className="relative flex w-full max-w-screen overflow-hidden rounded-3xl bg-[#efede6] shadow-2xl m-4">
         <div className="hidden w-1/2 items-center justify-center bg-[#4f2b21] p-8 lg:flex">
           <div className="text-center">
             <h1
