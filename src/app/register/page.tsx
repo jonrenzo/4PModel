@@ -95,200 +95,213 @@ export default function RegisterPage() {
 
   return (
     <div
-      className="min-h-screen relative"
+      className="flex h-screen w-full items-center justify-center"
       style={{
         backgroundImage: "url(/bg_login.png)",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
-      <div className="absolute inset-0 bg-yellow-900/50" />
-
-      <div className="relative flex min-h-screen flex-col overflow-auto py-12">
-        {/* Header */}
-        <div className="mb-6 items-center px-4">
-          <h1
-            className="text-center text-white drop-shadow-lg"
-            style={{
-              fontSize: 64,
-              lineHeight: 70,
-              fontFamily: "Great Vibes, cursive",
-            }}
-          >
-            Noli Me Tangere
-          </h1>
-          <p className="py-2 text-center font-bold text-white shadow-lg">
-            Paghihinuha, Paglilinaw, Pagsisiyasat, at Pagbubuod
-          </p>
-          <div className="mt-4">
-            <p className="text-center text-lg font-bold text-white">
-              Gumawa ng Account
+      <div className="absolute inset-0 bg-yellow-900/60" />
+      <div className="relative flex h-[600px] w-[900px] overflow-hidden rounded-3xl bg-[#efede6] shadow-2xl">
+        <div className="hidden w-1/2 items-center justify-center bg-[#4f2b21] p-8 lg:flex">
+          <div className="text-center">
+            <h1
+              className="text-white drop-shadow-lg"
+              style={{
+                fontSize: 72,
+                lineHeight: 80,
+                fontFamily: "Great Vibes, cursive",
+              }}
+            >
+              Noli Me Tangere
+            </h1>
+            <p className="mt-4 text-xl font-bold text-[#e8d4b0]">
+              Filipino Reading App
             </p>
-            <p className="px-4 text-center text-sm text-white opacity-80">
-              Ilagay ang inyong mga impormasyon upang makapagsimula
+            <p className="mt-8 text-sm text-[#a89070]">
+              Isang makulay na paglalakbay sa mundong may sakit sa lipunan
             </p>
           </div>
         </div>
-
-        {/* Form */}
-        <form onSubmit={handleRegister} className="mx-4 w-auto space-y-3">
-          <input
-            type="text"
-            placeholder="Pangalan"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="mb-2 w-full rounded-full border-2 border-[#3e2723] bg-[#efede6] px-6 py-3 text-center font-bold text-[#3e2723] shadow-sm"
-            required
-          />
-
-          <input
-            type="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
-            className="mb-2 w-full rounded-full border-2 border-[#3e2723] bg-[#efede6] px-6 py-3 text-center font-bold text-[#3e2723] shadow-sm"
-            required
-          />
-
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-              className="mb-2 w-full rounded-full border-2 border-[#3e2723] bg-[#efede6] px-6 py-3 pr-12 text-center font-bold text-[#3e2723] shadow-sm"
-              required
-            />
-            <button
-              type="button"
-              className="absolute right-4 top-3"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? (
-                <EyeOff size={24} color="#3e2723" />
-              ) : (
-                <Eye size={24} color="#3e2723" />
+        <div className="flex w-full flex-col justify-center px-12 py-8 lg:w-1/2">
+          <div className="mx-auto w-full max-w-md">
+            <div className="mb-6 text-center lg:hidden">
+              <h1
+                className="text-white drop-shadow-lg"
+                style={{
+                  fontSize: 48,
+                  lineHeight: 54,
+                  fontFamily: "Great Vibes, cursive",
+                }}
+              >
+                Noli Me Tangere
+              </h1>
+              <p className="mt-2 font-bold text-white">Filipino Reading App</p>
+            </div>
+            <div className="mb-6 text-center">
+              <h2 className="text-2xl font-bold text-[#4f2b21]">
+                Gumawa ng Account
+              </h2>
+              <p className="mt-2 text-sm text-[#6d4c41]">
+                Ilagay ang inyong mga impormasyon upang makapagsimula
+              </p>
+            </div>
+            <form onSubmit={handleRegister} className="space-y-4">
+              <div>
+                <input
+                  type="text"
+                  placeholder="Pangalan"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full rounded-xl border-2 border-[#8B4513] bg-white px-4 py-3 text-base text-[#3e2723] placeholder-[#8d6e63] focus:border-[#4f2b21] focus:outline-none"
+                  required
+                />
+              </div>
+              <div>
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  className="w-full rounded-xl border-2 border-[#8B4513] bg-white px-4 py-3 text-base text-[#3e2723] placeholder-[#8d6e63] focus:border-[#4f2b21] focus:outline-none"
+                  required
+                />
+              </div>
+              <div>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
+                    value={formData.password}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
+                    className="w-full rounded-xl border-2 border-[#8B4513] bg-white px-4 py-3 pr-12 text-base text-[#3e2723] placeholder-[#8d6e63] focus:border-[#4f2b21] focus:outline-none"
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 -translate-y-1/2"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <EyeOff size={20} color="#8d6e63" />
+                    ) : (
+                      <Eye size={20} color="#8d6e63" />
+                    )}
+                  </button>
+                </div>
+              </div>
+              <div>
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="Konfirmahin ang Password"
+                    value={formData.confirmPassword}
+                    onChange={(e) =>
+                      setFormData({ ...formData, confirmPassword: e.target.value })
+                    }
+                    className="w-full rounded-xl border-2 border-[#8B4513] bg-white px-4 py-3 pr-12 text-base text-[#3e2723] placeholder-[#8d6e63] focus:border-[#4f2b21] focus:outline-none"
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 -translate-y-1/2"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff size={20} color="#8d6e63" />
+                    ) : (
+                      <Eye size={20} color="#8d6e63" />
+                    )}
+                  </button>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <input
+                  type="text"
+                  placeholder="Baitang"
+                  value={formData.grade}
+                  onChange={(e) =>
+                    setFormData({ ...formData, grade: e.target.value })
+                  }
+                  className="flex-1 rounded-xl border-2 border-[#8B4513] bg-white px-4 py-3 text-base text-[#3e2723] placeholder-[#8d6e63] focus:border-[#4f2b21] focus:outline-none"
+                  required
+                />
+                <input
+                  type="text"
+                  placeholder="Seksyon"
+                  value={formData.section}
+                  onChange={(e) =>
+                    setFormData({ ...formData, section: e.target.value })
+                  }
+                  className="flex-1 rounded-xl border-2 border-[#8B4513] bg-white px-4 py-3 text-base text-[#3e2723] placeholder-[#8d6e63] focus:border-[#4f2b21] focus:outline-none"
+                  required
+                />
+              </div>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, role: "student" })}
+                  className={`flex-1 rounded-xl border-2 py-2 text-sm font-bold transition-all ${
+                    formData.role === "student"
+                      ? "border-[#4f2b21] bg-[#4f2b21] text-white"
+                      : "border-[#8B4513] bg-transparent text-[#4f2b21]"
+                  }`}
+                >
+                  Mag-aaral
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, role: "teacher" })}
+                  className={`flex-1 rounded-xl border-2 py-2 text-sm font-bold transition-all ${
+                    formData.role === "teacher"
+                      ? "border-[#4f2b21] bg-[#4f2b21] text-white"
+                      : "border-[#8B4513] bg-transparent text-[#4f2b21]"
+                  }`}
+                >
+                  Guro
+                </button>
+              </div>
+              {error && (
+                <p className="text-center text-sm text-red-600">{error}</p>
               )}
-            </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-xl border-2 border-[#4f2b21] bg-[#f5c170] py-3 text-lg font-bold uppercase tracking-wider text-[#3e2723] shadow-lg transition-all hover:bg-[#e5b160] disabled:opacity-50"
+              >
+                {loading ? "Loading..." : "REGISTER"}
+              </button>
+            </form>
+            <div className="mt-4 text-center">
+              <button
+                className="text-xs font-bold text-[#6d4c41] underline"
+                onClick={() => {
+                  const response = confirm(
+                    "Ako ay pumapayag sa mga tuntunin at kondisyon",
+                  );
+                  setAgreed(response);
+                }}
+              >
+                Mga Tuntunin at Kondisyon
+              </button>
+            </div>
+            <div className="mt-3 text-center">
+              <p className="text-sm text-[#6d4c41]">
+                May account na?{" "}
+                <Link
+                  href="/login"
+                  className="font-bold text-[#4f2b21] underline"
+                >
+                  Mag-login
+                </Link>
+              </p>
+            </div>
           </div>
-
-          <div className="relative">
-            <input
-              type={showConfirmPassword ? "text" : "password"}
-              placeholder="Konfirmahin ang Password"
-              value={formData.confirmPassword}
-              onChange={(e) =>
-                setFormData({ ...formData, confirmPassword: e.target.value })
-              }
-              className="mb-2 w-full rounded-full border-2 border-[#3e2723] bg-[#efede6] px-6 py-3 pr-12 text-center font-bold text-[#3e2723] shadow-sm"
-              required
-            />
-            <button
-              type="button"
-              className="absolute right-4 top-3"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            >
-              {showConfirmPassword ? (
-                <EyeOff size={24} color="#3e2723" />
-              ) : (
-                <Eye size={24} color="#3e2723" />
-              )}
-            </button>
-          </div>
-
-          <div className="flex space-x-2">
-            <input
-              type="text"
-              placeholder="Baitang"
-              value={formData.grade}
-              onChange={(e) =>
-                setFormData({ ...formData, grade: e.target.value })
-              }
-              className="mb-2 flex-1 rounded-full border-2 border-[#3e2723] bg-[#efede6] px-4 py-3 text-center font-bold text-[#3e2723] shadow-sm"
-              required
-            />
-            <input
-              type="text"
-              placeholder="Seksyon"
-              value={formData.section}
-              onChange={(e) =>
-                setFormData({ ...formData, section: e.target.value })
-              }
-              className="mb-2 flex-1 rounded-full border-2 border-[#3e2723] bg-[#efede6] px-4 py-3 text-center font-bold text-[#3e2723] shadow-sm"
-              required
-            />
-          </div>
-
-          {/* Role Selection */}
-          <div className="mb-4 flex justify-center space-x-4">
-            <button
-              type="button"
-              onClick={() => setFormData({ ...formData, role: "student" })}
-              className={`flex-1 rounded-full border-2 py-2 font-bold ${
-                formData.role === "student"
-                  ? "border-[#3e2723] bg-[#3e2723] text-white"
-                  : "border-white bg-transparent text-white"
-              }`}
-            >
-              Mag-aaral
-            </button>
-            <button
-              type="button"
-              onClick={() => setFormData({ ...formData, role: "teacher" })}
-              className={`flex-1 rounded-full border-2 py-2 font-bold ${
-                formData.role === "teacher"
-                  ? "border-[#3e2723] bg-[#3e2723] text-white"
-                  : "border-white bg-transparent text-white"
-              }`}
-            >
-              Guro
-            </button>
-          </div>
-
-          {error && <p className="text-center text-sm text-red-400">{error}</p>}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-full border-2 border-[#3e2723] bg-[#f5c170] py-4 shadow-lg disabled:opacity-50"
-          >
-            {loading ? (
-              <span className="text-center font-bold text-[#3e2723]">
-                Loading...
-              </span>
-            ) : (
-              <span className="block text-center text-xl font-bold uppercase tracking-widest text-[#3e2723]">
-                REGISTER
-              </span>
-            )}
-          </button>
-        </form>
-
-        {/* Footer Links */}
-        <div className="mt-6 items-center">
-          <button
-            className="font-bold text-sm text-white underline opacity-80"
-            onClick={() => {
-              const response = confirm(
-                "Ako ay pumapayag sa mga tuntunin at kondisyon",
-              );
-              setAgreed(response);
-            }}
-          >
-            Mga Tuntunin at Kondisyon
-          </button>
-        </div>
-
-        <div className="mt-4 items-center pb-8">
-          <Link href="/login">
-            <p className="font-bold text-sm text-white">
-              May account na? <span className="underline">Mag-login</span>
-            </p>
-          </Link>
         </div>
       </div>
     </div>

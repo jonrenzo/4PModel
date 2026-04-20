@@ -15,7 +15,7 @@ const greatVibes = Great_Vibes({
 });
 
 export const metadata: Metadata = {
-  title: "Noli Me Tangere - HiLiSiBu",
+  title: "Noli Me Tangere - 4pModel",
   description: "Filipino Reading App",
 };
 
