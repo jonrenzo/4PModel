@@ -53,7 +53,7 @@ export default function LoginPage() {
 
   return (
     <div
-      className="flex h-screen w-full items-center justify-center"
+      className="flex min-h-screen w-full items-center justify-center"
       style={{
         backgroundImage: "url(/bg_login.png)",
         backgroundSize: "cover",
@@ -61,7 +61,7 @@ export default function LoginPage() {
       }}
     >
       <div className="absolute inset-0 bg-yellow-900/60" />
-      <div className="relative flex h-[600px] w-[900px] overflow-hidden rounded-3xl bg-[#efede6] shadow-2xl">
+      <div className="relative flex w-full max-w-[900px] overflow-hidden rounded-3xl bg-[#efede6] shadow-2xl m-4">
         <div className="hidden w-1/2 items-center justify-center bg-[#4f2b21] p-8 lg:flex">
           <div className="text-center">
             <h1
@@ -82,7 +82,7 @@ export default function LoginPage() {
             </p>
           </div>
         </div>
-        <div className="flex w-full flex-col justify-center px-12 py-16 lg:w-1/2">
+        <div className="flex w-full flex-col justify-center px-8 py-6 lg:px-12 lg:py-8 lg:w-1/2">
           <div className="mx-auto w-full max-w-md">
             <div className="mb-8 text-center lg:hidden">
               <h1
