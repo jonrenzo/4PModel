@@ -53,7 +53,7 @@ export default function TeacherClassDetailPage() {
 
       // Extract profiles from the join result
       const profiles = enrollmentData
-        .map((e) => e.profiles)
+        .map((e: any) => (Array.isArray(e.profiles) ? e.profiles[0] : e.profiles))
         .filter((p) => p !== null) as { id: string; name: string }[];
 
       if (profiles.length === 0) {
