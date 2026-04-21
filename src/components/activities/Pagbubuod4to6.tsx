@@ -15,6 +15,8 @@ export default function Pagbubuod4to6({ rangeId }: { rangeId: string }) {
   const supabase = createClient();
   const [summary, setSummary] = useState("");
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -28,6 +30,22 @@ export default function Pagbubuod4to6({ rangeId }: { rangeId: string }) {
     };
     load();
   }, [rangeId]);
+
+  // Auto-save effect
+  useEffect(() => {
+    if (!summary.trim()) return;
+    const timer = setTimeout(async () => {
+      setSaving(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await supabase.from("4p_answers").upsert({ user_id: user.id, activity_type: "pagbubuod", chapter_range: rangeId, question_index: 1, answer: summary }, { onConflict: "user_id,activity_type,chapter_range,question_index" });
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000);
+      }
+      setSaving(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [summary]);
 
   const save = async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -63,7 +81,11 @@ export default function Pagbubuod4to6({ rangeId }: { rangeId: string }) {
           <div className="w-16 p-2 text-center">25</div>
         </div>
       </div>
-      <button onClick={save} className="w-full rounded-full bg-[#3e2723] py-2"><span className="font-bold text-white text-sm">I-save ang Buod</span></button>
+      <div className="flex items-center gap-2">
+        {saving && <span className="text-xs text-gray-500">Saving...</span>}
+        {saved && <span className="text-xs text-green-600">Nai-save na!</span>}
+        <button onClick={save} className="flex-1 rounded-full bg-[#3e2723] py-2"><span className="font-bold text-white text-sm">I-save ang Buod</span></button>
+      </div>
     </div>
   );
 }

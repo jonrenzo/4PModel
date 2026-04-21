@@ -14,6 +14,8 @@ export default function Paglilinaw1to3({ rangeId }: { rangeId: string }) {
   const supabase = createClient();
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -31,6 +33,25 @@ export default function Paglilinaw1to3({ rangeId }: { rangeId: string }) {
     };
     load();
   }, [rangeId]);
+
+  // Auto-save effect
+  useEffect(() => {
+    const nonEmpty = Object.entries(answers).filter(([_, v]) => v.trim());
+    if (nonEmpty.length === 0) return;
+    const timer = setTimeout(async () => {
+      setSaving(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        for (const [id, ans] of nonEmpty) {
+          await supabase.from("4p_answers").upsert({ user_id: user.id, activity_type: "paglilinaw", chapter_range: rangeId, question_index: Number(id), answer: ans }, { onConflict: "user_id,activity_type,chapter_range,question_index" });
+        }
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000);
+      }
+      setSaving(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [answers]);
 
   const save = async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -66,7 +87,11 @@ export default function Paglilinaw1to3({ rangeId }: { rangeId: string }) {
         ))}
       </div>
 
-      <button onClick={save} className="mt-4 w-full rounded-full bg-[#3e2723] py-2"><span className="font-bold text-white text-sm">I-save ang mga Sagot</span></button>
+      <div className="flex items-center gap-2 mt-4">
+        {saving && <span className="text-xs text-gray-500">Saving...</span>}
+        {saved && <span className="text-xs text-green-600">Nai-save na!</span>}
+        <button onClick={save} className="flex-1 rounded-full bg-[#3e2723] py-2"><span className="font-bold text-white text-sm">I-save ang mga Sagot</span></button>
+      </div>
     </div>
   );
 }

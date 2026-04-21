@@ -19,6 +19,8 @@ export default function Pagsisiyasat1to3({ rangeId }: { rangeId: string }) {
   const [savedAnswers, setSavedAnswers] = useState<{ [key: number]: string }>({});
   const [completedKeys, setCompletedKeys] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -36,6 +38,24 @@ export default function Pagsisiyasat1to3({ rangeId }: { rangeId: string }) {
     };
     load();
   }, [rangeId]);
+
+  // Auto-save effect
+  useEffect(() => {
+    if (!currentAnswer.trim() || !selectedKey) return;
+    const timer = setTimeout(async () => {
+      setSaving(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user && selectedKey) {
+        await supabase.from("4p_answers").upsert({ user_id: user.id, activity_type: "pagsisiyasat", chapter_range: rangeId, question_index: selectedKey, answer: currentAnswer }, { onConflict: "user_id,activity_type,chapter_range,question_index" });
+        setSavedAnswers((p: any) => ({ ...p, [selectedKey]: currentAnswer }));
+        if (!completedKeys.includes(selectedKey)) setCompletedKeys((p: any) => [...p, selectedKey]);
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000);
+      }
+      setSaving(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [currentAnswer, selectedKey]);
 
   const submit = async () => {
     if (!currentAnswer.trim()) return alert("Sumulat ng sagot");
@@ -79,6 +99,8 @@ export default function Pagsisiyasat1to3({ rangeId }: { rangeId: string }) {
           <p className="mb-3 text-xs text-[#78350f]">{questions.find(q => q.id === selectedKey)?.question}</p>
           <textarea className="w-full min-h-[100px] rounded-lg border border-[#d7ccc8] p-2 text-xs" placeholder="Isulat ang sagot..." value={currentAnswer} onChange={(e) => setCurrentAnswer(e.target.value)} />
           <div className="flex gap-2 mt-2">
+            {saving && <span className="text-xs text-gray-500">Saving...</span>}
+            {saved && <span className="text-xs text-green-600">Nai-save na!</span>}
             <button onClick={() => setSelectedKey(null)} className="flex-1 py-2 rounded-lg border border-gray-300 text-xs font-bold text-gray-600">Kanselahin</button>
             <button onClick={submit} className="flex-1 py-2 rounded-lg bg-[#f59e0b] text-xs font-bold text-white">I-submit</button>
           </div>

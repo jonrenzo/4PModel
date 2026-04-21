@@ -31,8 +31,27 @@ export default function Paghihinuha1to3({ rangeId }: { rangeId: string }) {
   const [savedAnswers, setSavedAnswers] = useState<{ [key: number]: string }>({});
   const [loading, setLoading] = useState(true);
   const [clawY, setClawY] = useState(0);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   const activityId = `paghihinuha-${rangeId}`;
+
+  // Auto-save effect
+  useEffect(() => {
+    if (!currentAnswer.trim() || !clawedCharacter) return;
+    const timer = setTimeout(async () => {
+      setSaving(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user && clawedCharacter) {
+        await supabase.from("4p_answers").upsert({ user_id: user.id, activity_type: "paghihinuha", chapter_range: rangeId, question_index: clawedCharacter.id, answer: currentAnswer }, { onConflict: "user_id,activity_type,chapter_range,question_index" });
+        setSavedAnswers((prev) => ({ ...prev, [clawedCharacter.id]: currentAnswer }));
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000);
+      }
+      setSaving(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [currentAnswer, clawedCharacter]);
 
   useEffect(() => { loadProgress(); }, []);
 
@@ -145,6 +164,8 @@ export default function Paghihinuha1to3({ rangeId }: { rangeId: string }) {
                 <p className="mb-3 text-xs text-[#5d4037]">{clawedCharacter.question}</p>
                 <textarea className="w-full min-h-[80px] rounded-xl border border-[#d7ccc8] p-3 text-xs" placeholder="Isulat ang sagot..." value={currentAnswer} onChange={(e) => setCurrentAnswer(e.target.value)} />
                 <div className="flex gap-2 mt-3">
+                  {saving && <span className="text-xs text-gray-500">Saving...</span>}
+                  {saved && <span className="text-xs text-green-600">Nai-save na!</span>}
                   <button onClick={() => { setShowQuestionModal(false); setClawedCharacter(null); }} className="flex-1 py-2 rounded-full border border-gray-300 text-sm font-bold text-gray-600">Laktawan</button>
                   <button onClick={handleSaveAnswer} className="flex-1 py-2 rounded-full bg-[#3e2723] text-sm font-bold text-white">I-save</button>
                 </div>
