@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Poppins, Great_Vibes } from "next/font/google";
 import "./globals.css";
 
