@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
-import { ArrowLeft, Users, BookOpen, ClipboardList, CheckCircle, RefreshCcw } from "lucide-react";
+import { ArrowLeft, Users, BookOpen, ClipboardList, RefreshCcw } from "lucide-react";
 import ClassMetrics from "@/components/ClassMetrics";
+import StudentAnswerPanel from "@/components/StudentAnswerPanel";
 
 type StudentRow = {
   id: string;
@@ -26,6 +27,18 @@ export default function TeacherClassDetailPage() {
   const [className, setClassName] = useState("");
   const [students, setStudents] = useState<StudentRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [teacherId, setTeacherId] = useState("");
+  const [selectedStudent, setSelectedStudent] = useState<StudentRow | null>(null);
+  // Fetch teacher ID once on mount
+  useEffect(() => {
+    const getTeacher = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) setTeacherId(user.id);
+    };
+    getTeacher();
+  }, []);
+
   const loadData = async () => {
     setLoading(true);
 
@@ -164,7 +177,11 @@ export default function TeacherClassDetailPage() {
                       idx % 2 === 0 ? "bg-[#efede6]" : "bg-[#f5ede0]"
                     }`}
                   >
-                    <td className="px-4 py-3 font-medium text-[#3e2723] whitespace-nowrap">
+                    <td
+                      className="px-4 py-3 font-medium text-[#3e2723] whitespace-nowrap cursor-pointer hover:text-[#5d4037] hover:underline decoration-[#8d6e63] underline-offset-2 transition-colors"
+                      onClick={() => setSelectedStudent(student)}
+                      title="Tingnan ang mga sagot"
+                    >
                       {student.name}
                     </td>
                     {cols.map((col) => {
@@ -212,6 +229,15 @@ export default function TeacherClassDetailPage() {
           </div>
         </div>
       </>
+    )}
+
+    {/* Student Answer Panel */}
+    {selectedStudent && teacherId && (
+      <StudentAnswerPanel
+        student={{ id: selectedStudent.id, name: selectedStudent.name }}
+        teacherId={teacherId}
+        onClose={() => setSelectedStudent(null)}
+      />
     )}
     </div>
   );
