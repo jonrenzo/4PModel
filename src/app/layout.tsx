@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Poppins, Great_Vibes } from "next/font/google";
 import "./globals.css";
 
@@ -21,6 +20,11 @@ export const metadata: Metadata = {
     icon: "/icon.png",
     apple: "/icon.png",
   },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
