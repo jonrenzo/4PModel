@@ -47,9 +47,9 @@ export default function StudentLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#4f2b21]">
+    <div className="h-screen bg-[#4f2b21] overflow-hidden">
       <Sidebar />
-      <div className="ml-64">
+      <div className="ml-64 h-full overflow-y-auto">
         {children}
       </div>
     </div>

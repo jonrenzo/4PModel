@@ -31,7 +31,6 @@ export default function Pagbubuod1to3({ rangeId }: { rangeId: string }) {
     load();
   }, [rangeId]);
 
-  // Auto-save effect
   useEffect(() => {
     if (!summary.trim()) return;
     const timer = setTimeout(async () => {
@@ -59,32 +58,42 @@ export default function Pagbubuod1to3({ rangeId }: { rangeId: string }) {
   return (
     <div className="pb-4">
       <div className="flex items-center gap-2 mb-3">
-        <div className="rounded-full bg-[#3e2723] p-1.5"><svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" /></svg></div>
+        <div className="rounded-full bg-[#3e2723] p-1.5">
+          <svg className="w-4 h-4 text-[#d4af37]" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
+          </svg>
+        </div>
         <h2 className="font-serif text-lg font-bold text-[#3e2723]">Pagbubuod</h2>
       </div>
       <p className="mb-3 text-xs text-[#5d4037]">Sumulat ng maikling buod (hanggang 10 pangungusap) mula sa Kabanata 1-3.</p>
-      <textarea className="w-full min-h-[120px] rounded-xl border border-gray-300 p-3 text-xs mb-3" placeholder="Simulan ang buod dito..." value={summary} onChange={(e) => setSummary(e.target.value)} />
-      
-      <div className="border rounded-xl overflow-hidden mb-3">
-        <div className="flex bg-[#d7ccc8] text-xs font-bold">
-          <div className="flex-1 p-2 border-r border-[#3e2723]">Pamantayan</div>
-          <div className="w-16 p-2 text-center">Puntos</div>
+      <textarea
+        className="w-full min-h-[120px] rounded-xl border border-[#c4b09a] bg-white p-3 text-xs text-[#3e2723] mb-3 focus:outline-none focus:border-[#8d6e63]"
+        placeholder="Simulan ang buod dito..."
+        value={summary}
+        onChange={(e) => setSummary(e.target.value)}
+      />
+      <div className="rounded-xl overflow-hidden border border-[#8d6e63] mb-3">
+        <div className="flex bg-[#5d4037] text-xs font-bold">
+          <div className="flex-1 p-2 border-r border-[#8d6e63] text-[#e8d4b0]">Pamantayan</div>
+          <div className="w-16 p-2 text-center text-[#e8d4b0]">Puntos</div>
         </div>
         {rubric.map((row, i) => (
-          <div key={i} className="flex text-xs border-t border-[#3e2723]">
-            <div className="flex-1 p-2 border-r border-[#3e2723]">{row.label}</div>
-            <div className="w-16 p-2 text-center bg-[#efede6]">{row.points}</div>
+          <div key={i} className={`flex text-xs border-t border-[#c4b09a] ${i % 2 === 0 ? "bg-[#efede6]" : "bg-[#f5ede0]"}`}>
+            <div className="flex-1 p-2 border-r border-[#c4b09a] text-[#3e2723]">{row.label}</div>
+            <div className="w-16 p-2 text-center font-semibold text-[#3e2723]">{row.points}</div>
           </div>
         ))}
-        <div className="flex bg-[#d7ccc8] text-xs font-bold">
-          <div className="flex-1 p-2 border-r border-[#3e2723]">Kabuuan</div>
-          <div className="w-16 p-2 text-center">25</div>
+        <div className="flex bg-[#5d4037] text-xs font-bold border-t border-[#8d6e63]">
+          <div className="flex-1 p-2 border-r border-[#8d6e63] text-[#e8d4b0]">Kabuuan</div>
+          <div className="w-16 p-2 text-center text-[#d4af37]">25</div>
         </div>
       </div>
       <div className="flex items-center gap-2">
-        {saving && <span className="text-xs text-gray-500">Saving...</span>}
-        {saved && <span className="text-xs text-green-600">Nai-save na!</span>}
-        <button onClick={save} className="flex-1 rounded-full bg-[#3e2723] py-2"><span className="font-bold text-white text-sm">I-save ang Buod</span></button>
+        {saving && <span className="text-xs text-[#8d6e63]">Sine-save...</span>}
+        {saved && <span className="text-xs text-[#5d4037] font-semibold">✓ Nai-save na!</span>}
+        <button onClick={save} className="flex-1 rounded-full bg-[#3e2723] py-2 hover:bg-[#5d4037] transition-colors">
+          <span className="font-bold text-[#e8d4b0] text-sm">I-save ang Buod</span>
+        </button>
       </div>
     </div>
   );

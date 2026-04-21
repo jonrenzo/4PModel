@@ -114,21 +114,21 @@ export default function Paghihinuha1to3({ rangeId }: { rangeId: string }) {
           <div className="rounded-full bg-[#3e2723] p-1.5"><Search size={14} className="text-[#d4af37]" /></div>
           <h2 className="font-serif text-lg font-bold text-[#3e2723]">Paghihinuha</h2>
         </div>
-        <div className="rounded-full bg-[#3e2723] px-3 py-1"><span className="text-sm font-bold text-white">{completedCount}/{characters.length}</span></div>
+        <div className="rounded-full bg-[#3e2723] px-3 py-1"><span className="text-sm font-bold text-[#e8d4b0]">{completedCount}/{characters.length}</span></div>
       </div>
 
       {/* Instructions */}
-      <div className="mb-3 rounded-xl border border-[#d4af37] bg-[#fff8e1] p-3">
-        <p className="text-xs text-[#5d4037]">Pindutin ang pulang button para kunin ang karakter. Magbigay ng hinuha tungkol sa kanyang papel sa nobela.</p>
+      <div className="mb-3 rounded-xl border border-[#c4b09a] bg-[#efede6] p-3">
+        <p className="text-xs text-[#5d4037]">Pindutin ang pindutan para kunin ang karakter. Magbigay ng hinuha tungkol sa kanyang papel sa nobela.</p>
       </div>
 
       {/* Claw Machine */}
-      <div className="rounded-2xl bg-gradient-to-b from-[#8d6e63] to-[#6d4c41] p-3 shadow-lg">
-        <div className="rounded-xl border-2 border-[#d4af37] bg-gradient-to-b from-[#e3f2fd] to-[#bbdefb] relative overflow-hidden" style={{ height: 200 }}>
+      <div className="rounded-2xl bg-linear-to-b from-[#8d6e63] to-[#6d4c41] p-3 shadow-lg">
+        <div className="rounded-xl border-2 border-[#d4af37] bg-linear-to-b from-[#e3f2fd] to-[#bbdefb] relative overflow-hidden" style={{ height: 200 }}>
           {/* Claw */}
           <motion.div className="absolute left-1/2 top-0 -translate-x-1/2" animate={{ y: clawY }} transition={{ duration: 0.8, ease: "easeInOut" }}>
-            <div className="w-1 h-8 bg-gradient-to-b from-gray-600 to-gray-400 mx-auto" />
-            <div className="w-12 h-12 rounded-full bg-gradient-to-b from-gray-400 to-gray-600 flex items-center justify-center mx-auto"><Search size={16} className="text-gray-700" /></div>
+            <div className="w-1 h-8 bg-linear-to-b from-gray-600 to-gray-400 mx-auto" />
+            <div className="w-12 h-12 rounded-full bg-linear-to-b from-gray-400 to-gray-600 flex items-center justify-center mx-auto"><Search size={16} className="text-gray-700" /></div>
           </motion.div>
 
           {/* Characters */}
@@ -144,9 +144,17 @@ export default function Paghihinuha1to3({ rangeId }: { rangeId: string }) {
         {/* Button */}
         <div className="mt-3 flex justify-center">
           <motion.button onClick={handleClawClick} disabled={isClawing || availableCharacters.length === 0}
-            className={`w-24 h-24 rounded-full flex flex-col items-center justify-center shadow-xl ${isClawing ? "bg-orange-500" : "bg-red-500 hover:bg-red-600"}`}
+            className={`w-24 h-24 rounded-full flex flex-col items-center justify-center shadow-xl border-b-4 ${
+              availableCharacters.length === 0
+                ? "bg-[#5d4037] border-[#3e2723] cursor-default"
+                : isClawing
+                ? "bg-[#8d6e63] border-[#5d4037]"
+                : "bg-[#3e2723] border-[#2c1a15] hover:bg-[#5d4037]"
+            }`}
             whileTap={{ scale: 0.95 }}>
-            {isClawing ? <div className="animate-spin"><Search size={24} className="text-white" /></div> : <><Search size={24} className="text-white" /><span className="text-xs text-white font-bold">{availableCharacters.length === 0 ? "TAPOS" : "SIMULA"}</span></>}
+            {isClawing
+              ? <div className="animate-spin"><Search size={24} className="text-[#d4af37]" /></div>
+              : <><Search size={24} className="text-[#d4af37]" /><span className="text-xs text-[#e8d4b0] font-bold mt-1">{availableCharacters.length === 0 ? "TAPOS" : "SIMULA"}</span></>}
           </motion.button>
         </div>
       </div>
@@ -156,18 +164,18 @@ export default function Paghihinuha1to3({ rangeId }: { rangeId: string }) {
         {showQuestionModal && clawedCharacter && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
             <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }} exit={{ scale: 0.8 }} className="w-full max-w-sm rounded-2xl bg-white shadow-2xl overflow-hidden">
-              <div className="bg-gradient-to-b from-[#f5e6d3] to-white p-4 text-center">
+              <div className="bg-linear-to-b from-[#f5e6d3] to-white p-4 text-center">
                 <img src={clawedCharacter.image} alt={clawedCharacter.name} className="w-20 h-20 rounded-full border-4 border-[#d4af37] mx-auto object-cover" />
                 <h3 className="mt-2 font-serif text-lg font-bold text-[#3e2723]">{clawedCharacter.name}</h3>
               </div>
               <div className="p-4">
-                <p className="mb-3 text-xs text-[#5d4037]">{clawedCharacter.question}</p>
-                <textarea className="w-full min-h-[80px] rounded-xl border border-[#d7ccc8] p-3 text-xs" placeholder="Isulat ang sagot..." value={currentAnswer} onChange={(e) => setCurrentAnswer(e.target.value)} />
-                <div className="flex gap-2 mt-3">
-                  {saving && <span className="text-xs text-gray-500">Saving...</span>}
-                  {saved && <span className="text-xs text-green-600">Nai-save na!</span>}
-                  <button onClick={() => { setShowQuestionModal(false); setClawedCharacter(null); }} className="flex-1 py-2 rounded-full border border-gray-300 text-sm font-bold text-gray-600">Laktawan</button>
-                  <button onClick={handleSaveAnswer} className="flex-1 py-2 rounded-full bg-[#3e2723] text-sm font-bold text-white">I-save</button>
+                <p className="mb-3 text-xs text-[#5d4037] leading-relaxed">{clawedCharacter.question}</p>
+                <textarea className="w-full min-h-[80px] rounded-xl border border-[#c4b09a] bg-[#efede6] p-3 text-xs text-[#3e2723] focus:outline-none focus:border-[#8d6e63]" placeholder="Isulat ang sagot..." value={currentAnswer} onChange={(e) => setCurrentAnswer(e.target.value)} />
+                <div className="flex gap-2 mt-3 items-center">
+                  {saving && <span className="text-xs text-[#8d6e63]">Sine-save...</span>}
+                  {saved && <span className="text-xs text-[#5d4037] font-semibold">✓ Nai-save!</span>}
+                  <button onClick={() => { setShowQuestionModal(false); setClawedCharacter(null); }} className="flex-1 py-2 rounded-full border border-[#8d6e63] text-sm font-bold text-[#5d4037] hover:bg-[#d7ccc8] transition-colors">Laktawan</button>
+                  <button onClick={handleSaveAnswer} className="flex-1 py-2 rounded-full bg-[#3e2723] text-sm font-bold text-[#e8d4b0] hover:bg-[#5d4037] transition-colors">I-save</button>
                 </div>
               </div>
             </motion.div>

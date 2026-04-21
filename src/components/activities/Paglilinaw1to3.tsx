@@ -68,8 +68,13 @@ export default function Paglilinaw1to3({ rangeId }: { rangeId: string }) {
 
   return (
     <div className="pb-4">
+      {/* Header */}
       <div className="flex items-center gap-2 mb-3">
-        <div className="rounded-full bg-[#3e2723] p-1.5"><svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v2a1 1 0 11-2 0v-2H6a1 1 0 110-2h2V6a1 1 0 012 0v2h2a1 1 0 110 2z" /></svg></div>
+        <div className="rounded-full bg-[#3e2723] p-1.5">
+          <svg className="w-4 h-4 text-[#d4af37]" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+          </svg>
+        </div>
         <h2 className="font-serif text-lg font-bold text-[#3e2723]">Paglilinaw</h2>
       </div>
 
@@ -77,20 +82,35 @@ export default function Paglilinaw1to3({ rangeId }: { rangeId: string }) {
 
       <div className="space-y-3">
         {characters.map((char) => (
-          <div key={char.id} className="flex gap-2 bg-white p-2 rounded-xl shadow-sm">
-            <img src={char.image} alt="char" className="w-16 h-16 rounded-lg object-cover border-2 border-[#d4af37]" />
-            <div className="flex-1">
-              <p className="text-xs text-[#5d4037] mb-1">{char.question}</p>
-              <textarea className="w-full min-h-[50px] text-xs border rounded-lg p-2" rows={2} onChange={(e) => setAnswers((p) => ({ ...p, [char.id]: e.target.value }))} value={answers[char.id] || ""} placeholder="Sagutin..." />
+          <div key={char.id} className="flex gap-3 bg-[#efede6] border border-[#c4b09a] p-3 rounded-xl shadow-sm">
+            <img
+              src={char.image}
+              alt="char"
+              className="w-16 h-16 rounded-lg object-cover border-2 border-[#d4af37] flex-shrink-0"
+            />
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-[#3e2723] font-medium mb-2 leading-relaxed">{char.question}</p>
+              <textarea
+                className="w-full min-h-[52px] text-xs border border-[#c4b09a] rounded-lg p-2 bg-white text-[#3e2723] focus:outline-none focus:border-[#8d6e63] resize-none"
+                rows={2}
+                onChange={(e) => setAnswers((p) => ({ ...p, [char.id]: e.target.value }))}
+                value={answers[char.id] || ""}
+                placeholder="Sagutin..."
+              />
             </div>
           </div>
         ))}
       </div>
 
       <div className="flex items-center gap-2 mt-4">
-        {saving && <span className="text-xs text-gray-500">Saving...</span>}
-        {saved && <span className="text-xs text-green-600">Nai-save na!</span>}
-        <button onClick={save} className="flex-1 rounded-full bg-[#3e2723] py-2"><span className="font-bold text-white text-sm">I-save ang mga Sagot</span></button>
+        {saving && <span className="text-xs text-[#8d6e63]">Sine-save...</span>}
+        {saved && <span className="text-xs text-[#5d4037] font-semibold">✓ Nai-save na!</span>}
+        <button
+          onClick={save}
+          className="flex-1 rounded-full bg-[#3e2723] py-2 hover:bg-[#5d4037] transition-colors"
+        >
+          <span className="font-bold text-[#e8d4b0] text-sm">I-save ang mga Sagot</span>
+        </button>
       </div>
     </div>
   );

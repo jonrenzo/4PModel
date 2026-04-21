@@ -115,9 +115,9 @@ export default function ActivityContainerPage() {
   }
 
   return (
-    <div className="h-full">
+    <div className="h-full flex flex-col p-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 flex-shrink-0">
         <div className="flex items-center">
           <Link href="/student/activities" className="p-2 text-[#e8d4b0] hover:bg-[#5d4037] rounded-lg">
             <ArrowLeft size={20} />
@@ -127,7 +127,7 @@ export default function ActivityContainerPage() {
       </div>
 
       {/* 4P Navigation Tabs */}
-      <div className="flex rounded-xl border border-[#8d6e63] bg-[#6d4c41] p-1 mb-4">
+      <div className="flex rounded-xl border border-[#8d6e63] bg-[#6d4c41] p-1 mb-4 flex-shrink-0">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
           const isTabLocked = !tab.alwaysUnlocked && isLocked;
@@ -151,7 +151,7 @@ export default function ActivityContainerPage() {
       </div>
 
       {/* Content Container */}
-      <div className="h-[calc(100vh-200px)] overflow-hidden rounded-2xl border border-[#8d6e63] bg-[#d7ccc8]">
+      <div className="flex-1 overflow-hidden rounded-2xl border border-[#8d6e63] bg-[#d7ccc8]">
         <div className="h-full overflow-y-auto p-4">
           {renderContent()}
         </div>
