@@ -54,17 +54,19 @@ export default function Sidebar() {
   return (
     <div className="fixed left-0 top-0 h-screen w-64 bg-[#4f2b21] flex flex-col">
       {/* Logo Section */}
-      <div className="p-6 border-b border-[#5d4037]">
+      <div className="p-6 border-b border-[#5d4037] flex flex-col items-center">
+        <div className="w-24 h-24 rounded-full bg-[#efede6] flex items-center justify-center overflow-hidden border border-[#5d4037] mb-3">
+          <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
+        </div>
         <h1
           className="text-center text-white"
           style={{
-            fontSize: 32,
+            fontSize: 24,
             fontFamily: "Great Vibes, cursive",
           }}
         >
           Noli Me Tangere
         </h1>
-        <p className="text-center text-xs text-[#e8d4b0] mt-1">P4 Model Web</p>
         {className && (
           <div className="mt-3 flex items-center justify-center gap-1.5 rounded-full bg-[#5d4037] px-3 py-1.5">
             <GraduationCap size={12} className="text-[#d4af37]" />
@@ -81,7 +83,7 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center px-6 py-3 mx-3 rounded-lg transition-colors ${
+              className={`flex items-center px-6 py-3 mx-3 my-1 rounded-lg transition-colors ${
                 isActive
                   ? "bg-[#5d4037] text-[#f5c170]"
                   : "text-[#bcaaa4] hover:bg-[#5d4037] hover:text-white"

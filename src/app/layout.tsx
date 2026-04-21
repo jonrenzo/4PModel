@@ -15,8 +15,12 @@ const greatVibes = Great_Vibes({
 });
 
 export const metadata: Metadata = {
-  title: "Noli Me Tangere - 4pModel",
+  title: "Noli Me Tangere - P4 Model",
   description: "Filipino Reading App",
+  icons: {
+    icon: "/icon.png",
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({

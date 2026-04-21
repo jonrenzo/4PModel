@@ -83,12 +83,17 @@ export default function TeacherDashboard() {
 
   return (
     <div className="min-h-screen bg-[#4f2b21]">
-      <header className="bg-[#5d4037] p-4 flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-[#f5f5f5]">
-            Teacher Dashboard
-          </h1>
-          <p className="text-[#E8D4B0]">Hi, {profile?.name || "Guro"}</p>
+      <header className="bg-[#5d4037] p-4 flex justify-between items-center border-b border-[#4f2b21]">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-full bg-[#efede6] flex items-center justify-center overflow-hidden border border-[#f5c170]">
+            <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-[#f5f5f5]">
+              Teacher Dashboard
+            </h1>
+            <p className="text-xs text-[#E8D4B0]">Hi, {profile?.name || "Guro"}</p>
+          </div>
         </div>
         <button onClick={handleLogout} className="p-2 bg-red-800 rounded-full">
           <LogOut size={20} className="text-white" />

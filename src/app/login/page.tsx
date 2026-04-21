@@ -313,6 +313,13 @@ export default function LoginPage() {
                 </svg>
               </div>
 
+              {/* Logo */}
+              <div className="mb-6 flex justify-center">
+                <div className="h-32 w-32 rounded-full bg-[#efede6] flex items-center justify-center overflow-hidden border-2 border-[#f5c170] shadow-xl">
+                  <img src="/logo.png" alt="Logo" className="h-full w-full object-contain" />
+                </div>
+              </div>
+
               <h1
                 style={{
                   fontFamily: "Great Vibes, cursive",
@@ -387,6 +394,11 @@ export default function LoginPage() {
             <div className="mx-auto w-full" style={{ maxWidth: 360 }}>
               {/* Mobile title */}
               <div className="mb-8 text-center lg:hidden">
+                <div className="mb-4 flex justify-center">
+                  <div className="h-24 w-24 rounded-full bg-[#efede6] flex items-center justify-center overflow-hidden border-2 border-[#4f2b21] shadow-lg">
+                    <img src="/logo.png" alt="Logo" className="h-full w-full object-contain" />
+                  </div>
+                </div>
                 <h1
                   style={{
                     fontFamily: "Great Vibes, cursive",
