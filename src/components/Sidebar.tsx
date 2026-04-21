@@ -11,8 +11,10 @@ import {
   Info,
   LogOut,
   BookMarked,
+  GraduationCap,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase";
+import { useEffect, useState } from "react";
 
 const menuItems = [
   { href: "/student", icon: Home, label: "Home" },
@@ -26,6 +28,23 @@ export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
+  const [className, setClassName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchClass = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("class_id, classes(name)")
+        .eq("id", user.id)
+        .single();
+      if (profile?.classes) {
+        setClassName((profile.classes as any).name ?? null);
+      }
+    };
+    fetchClass();
+  }, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -46,6 +65,12 @@ export default function Sidebar() {
           Noli Me Tangere
         </h1>
         <p className="text-center text-xs text-[#e8d4b0] mt-1">P4 Model Web</p>
+        {className && (
+          <div className="mt-3 flex items-center justify-center gap-1.5 rounded-full bg-[#5d4037] px-3 py-1.5">
+            <GraduationCap size={12} className="text-[#d4af37]" />
+            <span className="text-xs font-medium text-[#e8d4b0] truncate">{className}</span>
+          </div>
+        )}
       </div>
 
       {/* Navigation Menu */}
@@ -82,3 +107,4 @@ export default function Sidebar() {
     </div>
   );
 }
+

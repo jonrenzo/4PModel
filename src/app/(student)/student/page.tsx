@@ -82,7 +82,7 @@ export default function StudentDashboard() {
                   <img
                     src={`/kabanata_${chapter.id}.${[1,2,3].includes(chapter.id) ? 'jpg' : 'png'}`}
                     alt={chapter.title}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-fill"
                   />
                   {isRead && (
                     <div className="absolute right-2 top-2 flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-[#4f2b21]">
@@ -112,7 +112,7 @@ export default function StudentDashboard() {
                 >
                   <BookOpen
                     size={18}
-                    className={isRead ? "fill-current" : ""}
+                    className={isRead ? "fill-yellow-300/15" : ""}
                   />
                   <span className="ml-2 text-sm font-bold text-white">
                     {isRead

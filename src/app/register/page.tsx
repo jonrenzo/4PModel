@@ -28,9 +28,7 @@ export default function RegisterPage() {
     email: "",
     password: "",
     confirmPassword: "",
-    grade: "",
-    section: "",
-    role: "student",
+    classCode: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -48,7 +46,7 @@ export default function RegisterPage() {
   const isStepDone = (n: number) => {
     if (n === 1) return !!formData.name.trim() && !!formData.email.trim();
     if (n === 2) return !!formData.password && !!formData.confirmPassword;
-    if (n === 3) return !!formData.grade.trim() && !!formData.section.trim();
+    if (n === 3) return !!formData.classCode.trim();
     return false;
   };
 
@@ -67,16 +65,6 @@ export default function RegisterPage() {
       setLoading(false);
       return;
     }
-    if (!formData.grade.trim() || !formData.section.trim()) {
-      setError("Paki-enter ang baitang at seksyon.");
-      setLoading(false);
-      return;
-    }
-    if (agreed === false) {
-      setError("Kinakailangan mong sumang-ayon sa mga tuntunin.");
-      setLoading(false);
-      return;
-    }
     if (formData.password !== formData.confirmPassword) {
       setError("Hindi tumutugma ang password.");
       setLoading(false);
@@ -87,17 +75,36 @@ export default function RegisterPage() {
       setLoading(false);
       return;
     }
+    if (!formData.classCode.trim()) {
+      setError("Kinakailangan ang class code upang makapag-register.");
+      setLoading(false);
+      return;
+    }
 
     const supabase = createClient();
+
+    // Validate class code via server API (bypasses RLS for unauthenticated users)
+    const classRes = await fetch(
+      `/api/validate-class?code=${encodeURIComponent(formData.classCode.trim())}`
+    );
+
+    if (!classRes.ok) {
+      setError("Hindi mahanap ang klase. Suriin ang iyong class code.");
+      setLoading(false);
+      return;
+    }
+
+    const classData: { id: string; name: string } = await classRes.json();
+
+    // Sign up
     const { data, error: signupError } = await supabase.auth.signUp({
       email: formData.email.trim().toLowerCase(),
       password: formData.password,
       options: {
         data: {
           name: formData.name.trim(),
-          grade: formData.grade.trim(),
-          section: formData.section.trim(),
-          role: formData.role,
+          role: "student",
+          class_id: classData.id,
         },
       },
     });
@@ -109,11 +116,29 @@ export default function RegisterPage() {
       }
       setError(errorMessage);
       setLoading(false);
-    } else {
-      if (data.user) {
-        alert("Matagumpay na nakarehistro!");
-        router.push("/login");
+      return;
+    }
+
+    if (data.user) {
+      // Create profile via server API to bypass RLS
+      const profileRes = await fetch("/api/auth/register-profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: data.user.id,
+          name: formData.name.trim(),
+          classId: classData.id,
+          role: "student",
+        }),
+      });
+
+      if (!profileRes.ok) {
+        console.error("Failed to create profile");
+        // We still alert success for auth, but warn about profile
       }
+
+      alert(`Matagumpay na nakarehistro! Ikaw ay naka-enroll sa klase: ${classData.name}`);
+      router.push("/login");
     }
   };
 
@@ -683,59 +708,30 @@ export default function RegisterPage() {
               </div>
 
               {/* Section 3 */}
-              <div className="section-rule form-row">Impormasyon</div>
-
-              <div className="form-row" style={{ display: "flex", gap: 12 }}>
-                <div style={{ flex: 1 }}>
-                  <label className="field-label">Baitang</label>
-                  <input
-                    type="text"
-                    placeholder="Grade 9"
-                    value={formData.grade}
-                    onChange={(e) =>
-                      setFormData({ ...formData, grade: e.target.value })
-                    }
-                    className="parchment-input"
-                    required
-                  />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <label className="field-label">Seksyon</label>
-                  <input
-                    type="text"
-                    placeholder="Rizal"
-                    value={formData.section}
-                    onChange={(e) =>
-                      setFormData({ ...formData, section: e.target.value })
-                    }
-                    className="parchment-input"
-                    required
-                  />
-                </div>
-              </div>
+              <div className="section-rule form-row">Klase</div>
 
               <div className="form-row">
-                <label className="field-label">Papel</label>
-                <div style={{ display: "flex", gap: 10 }}>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setFormData({ ...formData, role: "student" })
-                    }
-                    className={`role-btn ${formData.role === "student" ? "active" : ""}`}
-                  >
-                    Mag-aaral
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setFormData({ ...formData, role: "teacher" })
-                    }
-                    className={`role-btn ${formData.role === "teacher" ? "active" : ""}`}
-                  >
-                    Guro
-                  </button>
-                </div>
+                <label className="field-label">Class Code</label>
+                <input
+                  type="text"
+                  placeholder="Hal. ABC123"
+                  value={formData.classCode}
+                  onChange={(e) =>
+                    setFormData({ ...formData, classCode: e.target.value.toUpperCase() })
+                  }
+                  className="parchment-input"
+                  style={{ textTransform: "uppercase", letterSpacing: "0.15em" }}
+                  required
+                />
+                <p style={{
+                  fontFamily: "EB Garamond, serif",
+                  fontStyle: "italic",
+                  fontSize: "0.8rem",
+                  color: "#9e7c5c",
+                  marginTop: 6,
+                }}>
+                  Humingi ng class code sa iyong guro.
+                </p>
               </div>
 
               {error && <div className="form-row error-box">{error}</div>}

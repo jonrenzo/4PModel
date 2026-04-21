@@ -14,6 +14,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [role, setRole] = useState<"student" | "teacher">("student");
 
   useEffect(() => {
     setMounted(true);
@@ -45,7 +46,20 @@ export default function LoginPage() {
         setError(errorMessage);
         setLoading(false);
       } else {
-        router.push("/student");
+        // Validate that the user's stored role matches the selected role
+        const supabase2 = createClient();
+        const { data: { user: loggedUser } } = await supabase2.auth.getUser();
+        const storedRole = loggedUser?.user_metadata?.role ?? "student";
+
+        if (storedRole !== role) {
+          await supabase2.auth.signOut();
+          const label = role === "teacher" ? "Guro" : "Mag-aaral";
+          setError(`Ang account na ito ay hindi isang ${label}. Pumili ng tamang papel.`);
+          setLoading(false);
+          return;
+        }
+
+        router.push(role === "teacher" ? "/teacher" : "/student");
       }
     } catch (err: any) {
       setError(err.message || "Hindi nakapag-login. Pakisubukan muli.");
@@ -383,6 +397,55 @@ export default function LoginPage() {
                 >
                   Noli Me Tangere
                 </h1>
+              </div>
+
+              {/* Role toggle */}
+              <div style={{ marginBottom: 28 }}>
+                <p
+                  style={{
+                    fontFamily: "Cormorant Garamond, serif",
+                    fontSize: "0.78rem",
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "#6b3a2a",
+                    marginBottom: 10,
+                  }}
+                >
+                  Pumasok bilang
+                </p>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    border: "1px solid #c9a96e",
+                    borderRadius: 4,
+                    overflow: "hidden",
+                  }}
+                >
+                  {(["student", "teacher"] as const).map((r) => (
+                    <button
+                      key={r}
+                      type="button"
+                      onClick={() => setRole(r)}
+                      style={{
+                        padding: "11px 0",
+                        fontFamily: "Cormorant Garamond, serif",
+                        fontSize: "0.9rem",
+                        fontWeight: 600,
+                        letterSpacing: "0.1em",
+                        textTransform: "capitalize",
+                        cursor: "pointer",
+                        border: "none",
+                        transition: "all 0.2s ease",
+                        background: role === r ? "#4f2b21" : "#fdf8f0",
+                        color: role === r ? "#f5e6c8" : "#7a5c4a",
+                        borderRight: r === "student" ? "1px solid #c9a96e" : "none",
+                      }}
+                    >
+                      {r === "student" ? "Mag-aaral" : "Guro"}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Desktop heading */}

@@ -124,7 +124,10 @@ export default function TeacherDashboard() {
                     {cls.invite_code}
                   </code>
                 </div>
-                <button className="mt-3 w-full py-2 bg-[#4f2b21] text-white rounded-full">
+                <button
+                  onClick={() => router.push(`/teacher/class/${cls.id}`)}
+                  className="mt-3 w-full py-2 bg-[#4f2b21] text-white rounded-full hover:bg-[#3e2723] transition-colors font-medium text-sm"
+                >
                   Tingnan ang Mag-aaral
                 </button>
               </div>
