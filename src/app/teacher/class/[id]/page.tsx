@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
-import { ArrowLeft, Users, BookOpen, ClipboardList, CheckCircle } from "lucide-react";
+import { ArrowLeft, Users, BookOpen, ClipboardList, CheckCircle, RefreshCcw } from "lucide-react";
 import ClassMetrics from "@/components/ClassMetrics";
 
 type StudentRow = {
@@ -26,86 +26,45 @@ export default function TeacherClassDetailPage() {
   const [className, setClassName] = useState("");
   const [students, setStudents] = useState<StudentRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const loadData = async () => {
+    setLoading(true);
 
-  useEffect(() => {
-    const load = async () => {
-      setLoading(true);
+    try {
+      const res = await fetch(`/api/teacher/class-progress?classId=${classId}`);
+      if (!res.ok) throw new Error("Failed to fetch class data");
+      
+      const data = await res.json();
+      setClassName(data.className);
 
-      // 1. Get class info
-      const { data: classData } = await supabase
-        .from("classes")
-        .select("name")
-        .eq("id", classId)
-        .single();
-      setClassName(classData?.name ?? "Klase");
-
-      // 2. Get all students in this class via class_enrollments
-      const { data: enrollmentData } = await supabase
-        .from("class_enrollments")
-        .select("student_id, profiles(id, name)")
-        .eq("class_id", classId);
-
-      if (!enrollmentData || enrollmentData.length === 0) {
+      if (data.profiles.length === 0) {
         setStudents([]);
         setLoading(false);
         return;
       }
 
-      // Extract profiles from the join result
-      const profiles = enrollmentData
-        .map((e: any) => (Array.isArray(e.profiles) ? e.profiles[0] : e.profiles))
-        .filter((p) => p !== null) as { id: string; name: string }[];
+      const { profiles, chapters, talasalitaan, activities } = data;
 
-      if (profiles.length === 0) {
-        setStudents([]);
-        setLoading(false);
-        return;
-      }
-
-      const studentIds = profiles.map((p) => p.id);
-
-      // 3. Fetch all data sources in parallel
-      const [chaptersRes, talasalitaanRes, activityRes] = await Promise.all([
-        supabase
-          .from("chapter_progress")
-          .select("user_id, chapter_id")
-          .in("user_id", studentIds)
-          .eq("is_read", true),
-        supabase
-          .from("talasalitaan_answers")
-          .select("user_id, chapter_id")
-          .in("user_id", studentIds),
-        supabase
-          .from("4p_answers")
-          .select("user_id, activity_type, question_index")
-          .in("user_id", studentIds),
-      ]);
-
-      const chapterRows = chaptersRes.data ?? [];
-      const talasRows = talasalitaanRes.data ?? [];
-      const activityRows = activityRes.data ?? [];
-
-      // 4. Aggregate per student
-      const rows: StudentRow[] = profiles.map((profile) => {
+      // Aggregate per student
+      const rows: StudentRow[] = profiles.map((profile: any) => {
         const uid = profile.id;
 
         // Unique chapters read
         const chaptersRead = new Set(
-          chapterRows.filter((r) => r.user_id === uid).map((r) => r.chapter_id)
+          chapters.filter((r: any) => r.user_id === uid).map((r: any) => r.chapter_id)
         ).size;
 
         // Unique chapters with talasalitaan answered
         const talasalitaanDone = new Set(
-          talasRows.filter((r) => r.user_id === uid).map((r) => r.chapter_id)
+          talasalitaan.filter((r: any) => r.user_id === uid).map((r: any) => r.chapter_id)
         ).size;
 
-        // 4P activity answers — count unique question_index per activity_type
-        const activityData = activityRows.filter((r) => r.user_id === uid);
+        // 4P activity answers — count unique (chapter_range + question_index) per activity_type
+        const activityData = activities.filter((r: any) => r.user_id === uid);
         const countUnique = (type: string) =>
           new Set(
             activityData
-              .filter((r) => r.activity_type === type)
-              .map((r) => r.question_index)
+              .filter((r: any) => r.activity_type === type)
+              .map((r: any) => `${r.chapter_range}-${r.question_index}`)
           ).size;
 
         return {
@@ -121,18 +80,24 @@ export default function TeacherClassDetailPage() {
       });
 
       setStudents(rows);
+    } catch (error) {
+      console.error("Load error:", error);
+    } finally {
       setLoading(false);
-    };
-    load();
+    }
+  };
+
+  useEffect(() => {
+    loadData();
   }, [classId]);
 
   const cols = [
     { key: "chaptersRead", label: "Kabanata\nNabasa", max: 6, icon: BookOpen },
     { key: "talasalitaanDone", label: "Talasalitaan\nNasagot", max: 6, icon: BookOpen },
     { key: "paghihinuha", label: "Paghihinuha", max: 12, icon: ClipboardList },
-    { key: "pagsisiyasat", label: "Pagsisiyasat", max: 10, icon: ClipboardList },
+    { key: "pagsisiyasat", label: "Pagsisiyasat", max: 15, icon: ClipboardList },
     { key: "paglilinaw", label: "Paglilinaw", max: 10, icon: ClipboardList },
-    { key: "pagbubuod", label: "Pagbubuod", max: 4, icon: ClipboardList },
+    { key: "pagbubuod", label: "Pagbubuod", max: 2, icon: ClipboardList },
   ] as const;
 
   return (
@@ -145,10 +110,18 @@ export default function TeacherClassDetailPage() {
         >
           <ArrowLeft size={20} />
         </button>
-        <div>
+        <div className="flex-1">
           <h1 className="text-xl font-bold text-[#f5e6c8]">{className}</h1>
           <p className="text-xs text-[#c4b09a]">{students.length} estudyante</p>
         </div>
+        <button
+          onClick={loadData}
+          disabled={loading}
+          className="p-2 text-[#e8d4b0] hover:bg-[#5d4037] rounded-lg transition-colors flex items-center gap-2 text-xs disabled:opacity-50"
+        >
+          <RefreshCcw size={16} className={loading ? "animate-spin" : ""} />
+          <span>{loading ? "Naglo-load..." : "I-refresh"}</span>
+        </button>
       </div>
 
       {loading ? (

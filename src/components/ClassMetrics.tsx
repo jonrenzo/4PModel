@@ -59,9 +59,9 @@ export default function ClassMetrics({ students }: ClassMetricsProps) {
 
   const radarData = [
     { subject: "Paghihinuha", A: avg("paghihinuha", 12), fullMark: 100 },
-    { subject: "Pagsisiyasat", A: avg("pagsisiyasat", 10), fullMark: 100 },
+    { subject: "Pagsisiyasat", A: avg("pagsisiyasat", 15), fullMark: 100 },
     { subject: "Paglilinaw", A: avg("paglilinaw", 10), fullMark: 100 },
-    { subject: "Pagbubuod", A: avg("pagbubuod", 4), fullMark: 100 },
+    { subject: "Pagbubuod", A: avg("pagbubuod", 2), fullMark: 100 },
     { subject: "Talasalitaan", A: avg("talasalitaanDone", 6), fullMark: 100 },
   ];
 
