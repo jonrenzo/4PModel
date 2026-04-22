@@ -46,15 +46,18 @@ export default function LoginPage() {
         setError(errorMessage);
         setLoading(false);
       } else {
-        // Validate that the user's stored role matches the selected role
         const supabase2 = createClient();
-        const { data: { user: loggedUser } } = await supabase2.auth.getUser();
+        const {
+          data: { user: loggedUser },
+        } = await supabase2.auth.getUser();
         const storedRole = loggedUser?.user_metadata?.role ?? "student";
 
         if (storedRole !== role) {
           await supabase2.auth.signOut();
           const label = role === "teacher" ? "Guro" : "Mag-aaral";
-          setError(`Ang account na ito ay hindi isang ${label}. Pumili ng tamang papel.`);
+          setError(
+            `Ang account na ito ay hindi isang ${label}. Pumili ng tamang papel.`,
+          );
           setLoading(false);
           return;
         }
@@ -150,6 +153,7 @@ export default function LoginPage() {
           transition: all 0.25s ease;
           outline: none;
           box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
+          box-sizing: border-box;
         }
         .parchment-input::placeholder {
           color: #a08060;
@@ -239,16 +243,17 @@ export default function LoginPage() {
       <div className="noise-overlay" />
 
       <div
-        className="flex min-h-screen w-full items-center justify-center"
+        className="relative flex min-h-screen w-full items-center justify-center"
         style={{
           backgroundImage: "url(/bg_login.png)",
           backgroundSize: "cover",
           backgroundPosition: "center",
+          backgroundAttachment: "fixed",
         }}
       >
         {/* Warm vignette overlay */}
         <div
-          className="absolute inset-0"
+          className="fixed inset-0"
           style={{
             background:
               "radial-gradient(ellipse at center, rgba(60,25,10,0.45) 0%, rgba(30,10,5,0.75) 100%)",
@@ -257,9 +262,10 @@ export default function LoginPage() {
 
         {/* Card */}
         <div
-          className={`login-panel relative flex w-full overflow-hidden shadow-2xl m-4 ${mounted ? "" : "opacity-0"}`}
+          className={`login-panel relative flex overflow-hidden shadow-2xl mx-auto my-8 ${mounted ? "" : "opacity-0"}`}
           style={{
             maxWidth: 920,
+            width: "calc(100% - 32px)",
             borderRadius: 2,
             border: "1px solid rgba(184,134,11,0.3)",
             boxShadow:
@@ -316,7 +322,11 @@ export default function LoginPage() {
               {/* Logo */}
               <div className="mb-6 flex justify-center">
                 <div className="h-32 w-32 rounded-full bg-[#efede6] flex items-center justify-center overflow-hidden border-2 border-[#f5c170] shadow-xl">
-                  <img src="/logo.png" alt="Logo" className="h-full w-full object-contain" />
+                  <img
+                    src="/logo.png"
+                    alt="Logo"
+                    className="h-full w-full object-contain"
+                  />
                 </div>
               </div>
 
@@ -396,7 +406,11 @@ export default function LoginPage() {
               <div className="mb-8 text-center lg:hidden">
                 <div className="mb-4 flex justify-center">
                   <div className="h-24 w-24 rounded-full bg-[#efede6] flex items-center justify-center overflow-hidden border-2 border-[#4f2b21] shadow-lg">
-                    <img src="/logo.png" alt="Logo" className="h-full w-full object-contain" />
+                    <img
+                      src="/logo.png"
+                      alt="Logo"
+                      className="h-full w-full object-contain"
+                    />
                   </div>
                 </div>
                 <h1
@@ -451,7 +465,8 @@ export default function LoginPage() {
                         transition: "all 0.2s ease",
                         background: role === r ? "#4f2b21" : "#fdf8f0",
                         color: role === r ? "#f5e6c8" : "#7a5c4a",
-                        borderRight: r === "student" ? "1px solid #c9a96e" : "none",
+                        borderRight:
+                          r === "student" ? "1px solid #c9a96e" : "none",
                       }}
                     >
                       {r === "student" ? "Mag-aaral" : "Guro"}
