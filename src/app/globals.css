@@ -1,34 +1,38 @@
 @import "tailwindcss";
 
 :root {
-  --background: #efede6;
-  --foreground: #3e2c2c;
-  --font-poppins: "Poppins", sans-serif;
-  --font-serif: "Great Vibes", cursive;
+    --background: #efede6;
+    --foreground: #3e2c2c;
+    --font-poppins: "Poppins", sans-serif;
+    --font-serif: "Great Vibes", cursive;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-poppins: "Poppins", sans-serif;
-  --font-serif: "Great Vibes", cursive;
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --font-poppins: "Poppins", sans-serif;
+    --font-serif: "Great Vibes", cursive;
+}
+
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: "Poppins", sans-serif;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: "Poppins", sans-serif;
 }
 
 .font-poppins {
-  font-family: "Poppins", sans-serif;
+    font-family: "Poppins", sans-serif;
 }
-
 .font-poppins-bold {
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
 }
-
 .font-serif {
-  font-family: "Great Vibes", cursive;
+    font-family: "Great Vibes", cursive;
 }

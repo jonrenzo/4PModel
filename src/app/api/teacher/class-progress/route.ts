@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
     const studentIds = profiles.map((p) => p.id);
 
     // 3. Fetch all progress data in parallel using admin key (bypassing RLS)
-    const [chaptersRes, talasalitaanRes, activityRes] = await Promise.all([
+    const [chaptersRes, talasalitaanRes, activityRes, talaTimestampRes, actTimestampRes] = await Promise.all([
       supabaseAdmin
         .from("chapter_progress")
         .select("user_id, chapter_id")
@@ -57,7 +57,32 @@ export async function GET(request: NextRequest) {
         .from("4p_answers")
         .select("user_id, activity_type, chapter_range, question_index")
         .in("user_id", studentIds),
+      // For last_active: fetch latest updated_at from talasalitaan
+      supabaseAdmin
+        .from("talasalitaan_answers")
+        .select("user_id, updated_at")
+        .in("user_id", studentIds),
+      // For last_active: fetch latest created_at from 4p_answers
+      supabaseAdmin
+        .from("4p_answers")
+        .select("user_id, created_at")
+        .in("user_id", studentIds),
     ]);
+
+    // Derive last_active per student: max of talasalitaan updated_at and 4p_answers created_at
+    const lastActiveMap: Record<string, string> = {};
+    for (const row of talaTimestampRes.data || []) {
+      const uid = row.user_id;
+      if (!lastActiveMap[uid] || row.updated_at > lastActiveMap[uid]) {
+        lastActiveMap[uid] = row.updated_at;
+      }
+    }
+    for (const row of actTimestampRes.data || []) {
+      const uid = row.user_id;
+      if (!lastActiveMap[uid] || row.created_at > lastActiveMap[uid]) {
+        lastActiveMap[uid] = row.created_at;
+      }
+    }
 
     return NextResponse.json({
       className: classData.name,
@@ -65,6 +90,7 @@ export async function GET(request: NextRequest) {
       chapters: chaptersRes.data || [],
       talasalitaan: talasalitaanRes.data || [],
       activities: activityRes.data || [],
+      lastActiveMap,
     });
   } catch (err: any) {
     console.error("Teacher API Error:", err);
