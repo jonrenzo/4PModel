@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Eye, EyeOff, Check } from "lucide-react";
+import { Eye, EyeOff, Check, Download } from "lucide-react";
 
 const STEPS = [
   { number: 1, label: "Pagkakakilanlan", sublabel: "Pangalan at email" },
@@ -805,6 +805,38 @@ export default function RegisterPage() {
                   Mag-login
                 </Link>
               </p>
+
+              {/* Download Android App Button */}
+              <div style={{ marginTop: 20, display: "flex", justifyContent: "center" }}>
+                <a
+                  href="/hilisibu-app.apk"
+                  download
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    background: "rgba(184, 134, 11, 0.1)",
+                    border: "1px solid rgba(184, 134, 11, 0.4)",
+                    color: "#4f2b21",
+                    padding: "8px 16px",
+                    borderRadius: "4px",
+                    fontFamily: "Cormorant Garamond, serif",
+                    fontSize: "0.9rem",
+                    fontWeight: 600,
+                    textDecoration: "none",
+                    transition: "all 0.2s",
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.background = "rgba(184, 134, 11, 0.2)";
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.background = "rgba(184, 134, 11, 0.1)";
+                  }}
+                >
+                  <Download size={16} />
+                  <span>I-download ang Android App</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>

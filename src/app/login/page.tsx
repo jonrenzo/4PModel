@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Download } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -405,7 +405,7 @@ export default function LoginPage() {
               {/* Mobile title */}
               <div className="mb-8 text-center lg:hidden">
                 <div className="mb-4 flex justify-center">
-                  <div className="h-24 w-24 rounded-full bg-[#efede6] flex items-center justify-center overflow-hidden border-2 border-[#4f2b21] shadow-lg">
+                  <div className="h-18 w-18 rounded-full bg-[#efede6] flex items-center justify-center overflow-hidden border-2 border-[#4f2b21] shadow-lg">
                     <img
                       src="/logo.png"
                       alt="Logo"
@@ -429,7 +429,7 @@ export default function LoginPage() {
               <div style={{ marginBottom: 28 }}>
                 <p
                   style={{
-                    fontFamily: "Cormorant Garamond, serif",
+                    fontFamily: "Poppins, serif",
                     fontSize: "0.78rem",
                     letterSpacing: "0.16em",
                     textTransform: "uppercase",
@@ -455,7 +455,7 @@ export default function LoginPage() {
                       onClick={() => setRole(r)}
                       style={{
                         padding: "11px 0",
-                        fontFamily: "Cormorant Garamond, serif",
+                        fontFamily: "Poppins, serif",
                         fontSize: "0.9rem",
                         fontWeight: 600,
                         letterSpacing: "0.1em",
@@ -479,7 +479,7 @@ export default function LoginPage() {
               <div className="hidden lg:block" style={{ marginBottom: 36 }}>
                 <p
                   style={{
-                    fontFamily: "Cormorant Garamond, serif",
+                    fontFamily: "Poppins, serif",
                     fontSize: "0.75rem",
                     letterSpacing: "0.22em",
                     color: "#b8860b",
@@ -491,7 +491,7 @@ export default function LoginPage() {
                 </p>
                 <h2
                   style={{
-                    fontFamily: "Cormorant Garamond, serif",
+                    fontFamily: "Poppins, serif",
                     fontSize: "2rem",
                     fontWeight: 600,
                     color: "#3a1e16",
@@ -620,6 +620,48 @@ export default function LoginPage() {
                     Mag-register
                   </Link>
                 </p>
+              </div>
+
+              {/* Download Android App Button */}
+              <div
+                style={{
+                  marginTop: 20,
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <a
+                  href="/p4model.apk"
+                  download
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    background: "rgba(184, 134, 11, 0.1)",
+                    border: "1px solid rgba(184, 134, 11, 0.4)",
+                    color: "#4f2b21",
+                    padding: "8px 16px",
+                    borderRadius: "4px",
+                    fontFamily: "Cormorant Garamond, serif",
+                    fontSize: "0.9rem",
+                    fontWeight: 600,
+                    textDecoration: "none",
+                    transition: "all 0.2s",
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.background =
+                      "rgba(184, 134, 11, 0.2)";
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.background =
+                      "rgba(184, 134, 11, 0.1)";
+                  }}
+                >
+                  <Download size={16} />
+                  <span className="font-poppins">
+                    I-download ang Android App
+                  </span>
+                </a>
               </div>
             </div>
           </div>
