@@ -68,7 +68,7 @@ export default function AboutPage() {
               <p className="text-sm text-[#3e2723]">- Torio, Princess B.</p>
             </div>
             <p className="mb-3 font-bold text-base text-[#3e2723]">Bersyon</p>
-            <p className="mb-4 text-sm text-[#3e2723]">v1.0.0 (Alpha)</p>
+            <p className="mb-4 text-sm text-[#3e2723]">v2.0.0 Web Version</p>
           </div>
         </div>
 
