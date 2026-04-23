@@ -99,11 +99,17 @@ export default function ProfilePage() {
     );
   }
 
-  const readChapters = progress.filter((p) => p.is_read).map((p) => p.chapter_id);
-  const readProgress = { read: readChapters.length, total: chaptersData.length };
+  const readChapters = progress
+    .filter((p) => p.is_read)
+    .map((p) => p.chapter_id);
+  const readProgress = {
+    read: readChapters.length,
+    total: chaptersData.length,
+  };
   const totalAnswered = talasalitaanAnswers.length;
-  const progressPercentage = totalAnswered > 0 ? (totalAnswered / totalQuestions) * 100 : 0;
-  
+  const progressPercentage =
+    totalAnswered > 0 ? (totalAnswered / totalQuestions) * 100 : 0;
+
   const studentName = profile?.name || "User";
 
   const handleUpdateAvatar = async (url: string) => {
@@ -163,8 +169,8 @@ export default function ProfilePage() {
           </div>
           <h2 className="font-bold text-2xl text-[#4a342e]">{studentName}</h2>
           <p className="text-[#4a342e] opacity-70">
-            {profile?.role === "teacher" ? "Guro" : "Mag-aaral"} - {profile?.grade || "-"} -{" "}
-            {profile?.section || "-"}
+            {profile?.role === "teacher" ? "Guro" : "Mag-aaral"} -{" "}
+            {profile?.grade || "-"} - {profile?.section || "-"}
           </p>
         </div>
 
@@ -179,7 +185,8 @@ export default function ProfilePage() {
             />
           </div>
           <p className="mt-1 text-right text-xs text-gray-500">
-            {readProgress.read} out of {readProgress.total} na kabanata ang nabasa
+            {readProgress.read} out of {readProgress.total} na kabanata ang
+            nabasa
           </p>
         </div>
 
@@ -207,7 +214,9 @@ export default function ProfilePage() {
       {showQR && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-8 z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-lg">
-            <h3 className="font-bold text-lg mb-4 text-center">Lahat ng mga Sagot</h3>
+            <h3 className="font-bold text-lg mb-4 text-center">
+              Lahat ng mga Sagot
+            </h3>
             <div className="bg-white p-4 rounded-lg max-h-80 overflow-y-auto">
               <p className="text-xs whitespace-pre-wrap">
                 {`User: ${studentName}

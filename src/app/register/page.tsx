@@ -128,6 +128,7 @@ export default function RegisterPage() {
           userId: data.user.id,
           name: formData.name.trim(),
           classId: classData.id,
+          className: classData.name,
           role: "student",
         }),
       });

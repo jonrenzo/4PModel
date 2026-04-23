@@ -8,10 +8,23 @@ const supabaseAdmin = createClient(
 
 export async function POST(request: NextRequest) {
   try {
-    const { userId, name, classId, role } = await request.json();
+    const { userId, name, classId, role, className } = await request.json();
 
     if (!userId || !name) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+
+    let grade = "";
+    let section = "";
+    if (className) {
+      if (className.includes("-")) {
+        const parts = className.split("-");
+        grade = parts[0].trim();
+        section = parts.slice(1).join("-").trim();
+      } else {
+        grade = className;
+        section = "";
+      }
     }
 
     const { error } = await supabaseAdmin.from("profiles").upsert({
@@ -19,6 +32,8 @@ export async function POST(request: NextRequest) {
       name,
       role: role || "student",
       class_id: classId || null,
+      grade: grade || null,
+      section: section || null,
     }, { onConflict: "id" });
 
     if (error) {
