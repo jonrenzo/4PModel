@@ -14,20 +14,35 @@ export default function ChapterDetailPage() {
   const chapter = chaptersData.find((c) => c.id === id);
   const supabase = createClient();
 
-  const [activeTab, setActiveTab] = useState<"talasalitaan" | "nobela">("talasalitaan");
-  const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: string }>({});
-  const [mindMapInputs, setMindMapInputs] = useState<string[]>(["", "", "", ""]);
-  const [punanAnswers, setPunanAnswers] = useState<{ [key: number]: string }>({});
+  const [activeTab, setActiveTab] = useState<"talasalitaan" | "nobela">(
+    "talasalitaan",
+  );
+  const [selectedAnswers, setSelectedAnswers] = useState<{
+    [key: number]: string;
+  }>({});
+  const [mindMapInputs, setMindMapInputs] = useState<string[]>([
+    "",
+    "",
+    "",
+    "",
+  ]);
+  const [punanAnswers, setPunanAnswers] = useState<{ [key: number]: string }>(
+    {},
+  );
   const [punanInputs, setPunanInputs] = useState<{ [key: string]: string }>({});
   const [matches, setMatches] = useState<{ [key: number]: string }>({});
   const [activeChoice, setActiveChoice] = useState<string | null>(null);
-  const [connectedPairs, setConnectedPairs] = useState<{ [key: number]: string }>({});
+  const [connectedPairs, setConnectedPairs] = useState<{
+    [key: number]: string;
+  }>({});
   const [selectedTerm, setSelectedTerm] = useState<number | null>(null);
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       setUser(user);
     };
     getUser();
@@ -43,7 +58,7 @@ export default function ChapterDetailPage() {
             is_read: true,
             read_at: new Date().toISOString(),
           },
-          { onConflict: "user_id,chapter_id" }
+          { onConflict: "user_id,chapter_id" },
         );
       };
       markAsRead();
@@ -113,7 +128,7 @@ export default function ChapterDetailPage() {
         quiz_type: chapter.quizType,
         answers: answersToSave,
       },
-      { onConflict: "user_id,chapter_id,quiz_type" }
+      { onConflict: "user_id,chapter_id,quiz_type" },
     );
     alert("Sagot Nai-save!");
   };
@@ -128,7 +143,12 @@ export default function ChapterDetailPage() {
     setMindMapInputs(newInputs);
   };
 
-  const handlePunanTextChange = (text: string, questionId: number, charIndex: number, clues: string[]) => {
+  const handlePunanTextChange = (
+    text: string,
+    questionId: number,
+    charIndex: number,
+    clues: string[],
+  ) => {
     const key = `q${questionId}-${charIndex}`;
     const upperText = text.toUpperCase();
     const newPunanInputs = { ...punanInputs, [key]: upperText };
@@ -173,7 +193,7 @@ export default function ChapterDetailPage() {
     setConnectedPairs((prev) => {
       const newState = { ...prev };
       const existingTermId = Object.keys(newState).find(
-        (key) => newState[Number(key)] === definition
+        (key) => newState[Number(key)] === definition,
       );
       if (existingTermId) {
         delete newState[Number(existingTermId)];
@@ -196,7 +216,10 @@ export default function ChapterDetailPage() {
     <div className="min-h-screen bg-[#4a342e] p-6">
       {/* Header */}
       <div className="flex items-center mb-6">
-        <Link href="/student" className="p-2 text-[#e8d4b0] hover:bg-[#5d4037] rounded-lg">
+        <Link
+          href="/student"
+          className="p-2 text-[#e8d4b0] hover:bg-[#5d4037] rounded-lg"
+        >
           <ArrowLeft size={24} />
         </Link>
         <h1 className="ml-2 flex-1 text-center text-lg font-bold text-[#e8d4b0]">
@@ -207,12 +230,14 @@ export default function ChapterDetailPage() {
       {/* Chapter Image */}
       <div className="relative h-56 rounded-2xl border-2 border-[#5d4037] bg-black overflow-hidden mb-6">
         <img
-          src={`/kabanata_${chapter.id}.${[1,2,3].includes(chapter.id) ? 'jpg' : 'png'}`}
+          src={`/kabanata_${chapter.id}.${[1, 2, 3].includes(chapter.id) ? "jpg" : "png"}`}
           alt={chapter.title}
           className="h-full w-full object-cover opacity-90"
         />
         <div className="absolute bottom-0 w-full bg-black/50 p-4">
-          <p className="text-xs uppercase tracking-widest text-[#e8d4b0]">{chapter.tag}</p>
+          <p className="text-xs uppercase tracking-widest text-[#e8d4b0]">
+            {chapter.tag}
+          </p>
           <p className="text-xl font-bold text-white">{chapter.title}</p>
         </div>
       </div>
@@ -225,8 +250,15 @@ export default function ChapterDetailPage() {
             activeTab === "talasalitaan" ? "bg-[#8d6e63]" : "bg-transparent"
           }`}
         >
-          <BookOpen size={14} className={activeTab === "talasalitaan" ? "text-white" : "text-[#bcaaa4]"} />
-          <span className={`ml-2 text-sm font-bold ${activeTab === "talasalitaan" ? "text-white" : "text-[#bcaaa4]"}`}>
+          <BookOpen
+            size={14}
+            className={
+              activeTab === "talasalitaan" ? "text-white" : "text-[#bcaaa4]"
+            }
+          />
+          <span
+            className={`ml-2 text-sm font-bold ${activeTab === "talasalitaan" ? "text-white" : "text-[#bcaaa4]"}`}
+          >
             Talasalitaan
           </span>
         </button>
@@ -236,8 +268,13 @@ export default function ChapterDetailPage() {
             activeTab === "nobela" ? "bg-[#8d6e63]" : "bg-transparent"
           }`}
         >
-          <BookOpen size={14} className={activeTab === "nobela" ? "text-white" : "text-[#bcaaa4]"} />
-          <span className={`ml-2 text-sm font-bold ${activeTab === "nobela" ? "text-white" : "text-[#bcaaa4]"}`}>
+          <BookOpen
+            size={14}
+            className={activeTab === "nobela" ? "text-white" : "text-[#bcaaa4]"}
+          />
+          <span
+            className={`ml-2 text-sm font-bold ${activeTab === "nobela" ? "text-white" : "text-[#bcaaa4]"}`}
+          >
             Nobela
           </span>
         </button>
@@ -250,20 +287,30 @@ export default function ChapterDetailPage() {
             {/* Multiple Choice */}
             {chapter.quizType === "multiple-choice" && (
               <div>
-                <h2 className="font-serif text-xl font-bold text-[#3e2723] mb-2">TUMPAK SALITA</h2>
+                <h2 className="font-poppins text-xl font-bold text-[#3e2723] mb-2">
+                  TUMPAK SALITA
+                </h2>
                 <p className="text-sm text-[#5d4037] mb-6 opacity-80">
                   <span className="font-bold">Panuto: </span>
-                  Basahin nang mabuti ang bawat pangungusap. Piliin at pindutin ang pinakaangkop na kasingkahulugan.
+                  Basahin nang mabuti ang bawat pangungusap. Piliin at pindutin
+                  ang pinakaangkop na kasingkahulugan.
                 </p>
                 {chapter.quiz.map((item, index) => (
                   <div key={item.id} className="mb-8">
                     <p className="mb-3 text-sm leading-6 text-[#3e2723]">
-                      {index + 1}. {item.question?.split(item.wordToDefine || "").map((part, i, arr) => (
-                        <span key={i}>
-                          {part}
-                          {i < arr.length - 1 && <span className="font-bold underline">{item.wordToDefine}</span>}
-                        </span>
-                      ))}
+                      {index + 1}.{" "}
+                      {item.question
+                        ?.split(item.wordToDefine || "")
+                        .map((part, i, arr) => (
+                          <span key={i}>
+                            {part}
+                            {i < arr.length - 1 && (
+                              <span className="font-bold underline">
+                                {item.wordToDefine}
+                              </span>
+                            )}
+                          </span>
+                        ))}
                     </p>
                     <div className="grid grid-cols-2 gap-2">
                       {item.options?.map((option, idx) => {
@@ -291,9 +338,12 @@ export default function ChapterDetailPage() {
             {/* Mind Map */}
             {chapter.quizType === "mind-map" && (
               <div className="py-4">
-                <h2 className="font-bold text-lg text-[#3e2723] mb-4 text-center">Buuin ang Diwa</h2>
+                <h2 className="font-poppins font-bold text-2xl text-[#3e2723] mb-4 text-center">
+                  Buuin ang Diwa
+                </h2>
                 <p className="text-xs text-[#5d4037] mb-6 text-center opacity-70">
-                  Isulat sa bawat hugis ang unang salitang pumasok sa iyong isipan na may kaugnayan sa salitang nasa gitna.
+                  Isulat sa bawat hugis ang unang salitang pumasok sa iyong
+                  isipan na may kaugnayan sa salitang nasa gitna.
                 </p>
 
                 <div className="relative h-[300px] w-full flex items-center justify-center mb-6">
@@ -306,7 +356,7 @@ export default function ChapterDetailPage() {
                   {/* Center circle */}
                   <div className="z-10 h-32 w-32 rounded-full border-2 border-dashed border-[#3e2723] bg-[#f5c170] flex items-center justify-center shadow-sm">
                     <div className="h-28 w-28 rounded-full border border-[#3e2723] bg-[#f5c170] flex items-center justify-center">
-                      <span className="font-serif font-bold text-lg text-[#3e2723]">
+                      <span className="font-poppins font-bold text-lg text-[#3e2723]">
                         {chapter.quiz[0].centerWord}
                       </span>
                     </div>
@@ -341,23 +391,36 @@ export default function ChapterDetailPage() {
             {/* Punan Mo */}
             {chapter.quizType === "punan-mo" && (
               <div>
-                <h2 className="font-serif text-xl font-bold text-[#3e2723] mb-2 text-center">PUNAN MO!</h2>
+                <h2 className="font-poppins text-xl font-bold text-[#3e2723] mb-2 text-center">
+                  PUNAN MO!
+                </h2>
                 <p className="text-sm text-[#5d4037] mb-6 opacity-80">
                   <span className="font-bold">Panuto: </span>
-                  Isulat ang nawawalang titik sa ilang kahon upang mabuo ang kahulugan ng salitang may salungguhit.
+                  Isulat ang nawawalang titik sa ilang kahon upang mabuo ang
+                  kahulugan ng salitang may salungguhit.
                 </p>
 
                 <div className="grid grid-cols-2 gap-4">
                   {chapter.quiz.map((item, index) => (
-                    <div key={item.id} className={`${index === 4 ? "col-span-2" : ""}`}>
+                    <div
+                      key={item.id}
+                      className={`${index === 4 ? "col-span-2" : ""}`}
+                    >
                       <div className="min-h-[80px] justify-center border border-[#3e2723]/30 bg-[#e8d4b0]/30 p-2 mb-2 shadow-sm">
                         <p className="text-xs leading-4 text-[#3e2723]">
-                          {index + 1}. {item.question?.split(item.wordToDefine || "").map((part, i, arr) => (
-                            <span key={i}>
-                              {part}
-                              {i < arr.length - 1 && <span className="font-bold underline">{item.wordToDefine}</span>}
-                            </span>
-                          ))}
+                          {index + 1}.{" "}
+                          {item.question
+                            ?.split(item.wordToDefine || "")
+                            .map((part, i, arr) => (
+                              <span key={i}>
+                                {part}
+                                {i < arr.length - 1 && (
+                                  <span className="font-bold underline">
+                                    {item.wordToDefine}
+                                  </span>
+                                )}
+                              </span>
+                            ))}
                         </p>
                       </div>
                       <div className="flex flex-wrap justify-center gap-1">
@@ -370,14 +433,21 @@ export default function ChapterDetailPage() {
                               className="h-8 w-8 flex items-center justify-center border-b-2 border-[#3e2723]"
                             >
                               {isPreFilled ? (
-                                <span className="font-bold text-xs text-[#3e2723]">{char}</span>
+                                <span className="font-bold text-xs text-[#3e2723]">
+                                  {char}
+                                </span>
                               ) : (
                                 <input
                                   type="text"
                                   maxLength={1}
                                   value={punanInputs[inputKey] || ""}
                                   onChange={(e) =>
-                                    handlePunanTextChange(e.target.value, item.id, charIdx, item.clues || [])
+                                    handlePunanTextChange(
+                                      e.target.value,
+                                      item.id,
+                                      charIdx,
+                                      item.clues || [],
+                                    )
                                   }
                                   className="w-full h-full text-center font-bold text-xs text-[#3e2723] bg-transparent"
                                 />
@@ -395,12 +465,13 @@ export default function ChapterDetailPage() {
             {/* Matching */}
             {chapter.quizType === "matching" && (
               <div>
-                <h2 className="font-serif text-xl font-bold text-[#3e2723] mb-2 text-center">
+                <h2 className="font-poppins text-xl font-bold text-[#3e2723] mb-2 text-center">
                   {chapter.quizTitle}
                 </h2>
                 <p className="text-sm text-[#5d4037] mb-6 opacity-80">
                   <span className="font-bold">Panuto: </span>
-                  {chapter.quizInstructions || "Iugnay ang salita sa tamang kahulugan."}
+                  {chapter.quizInstructions ||
+                    "Iugnay ang salita sa tamang kahulugan."}
                 </p>
 
                 <div className="space-y-4 mb-8">
@@ -409,14 +480,19 @@ export default function ChapterDetailPage() {
                       <button
                         onClick={() => handleLineClick(item.id)}
                         className={`flex-1 border-b-2 min-h-[32px] flex items-end justify-center pb-1 ${
-                          matches[item.id] ? "bg-[#3e2723]/10 border-[#3e2723]" : "border-[#3e2723]"
+                          matches[item.id]
+                            ? "bg-[#3e2723]/10 border-[#3e2723]"
+                            : "border-[#3e2723]"
                         }`}
                       >
-                        <span className="font-bold text-xs text-[#3e2723]">{matches[item.id] || ""}</span>
+                        <span className="font-bold text-xs text-[#3e2723]">
+                          {matches[item.id] || ""}
+                        </span>
                       </button>
                       <div className="flex-1">
                         <p className="text-xs leading-4 text-[#3e2723]">
-                          {item.id}. <span className="font-bold">{item.term}</span>
+                          {item.id}.{" "}
+                          <span className="font-bold">{item.term}</span>
                         </p>
                       </div>
                     </div>
@@ -438,7 +514,9 @@ export default function ChapterDetailPage() {
                             : "border-[#8d6e63] bg-[#bcaaa4]"
                         } shadow-sm`}
                       >
-                        <span className={`text-[10px] font-bold ${isActive ? "text-white" : "text-[#3e2723]"}`}>
+                        <span
+                          className={`text-[10px] font-bold ${isActive ? "text-white" : "text-[#3e2723]"}`}
+                        >
                           {choice}
                         </span>
                       </button>
@@ -451,7 +529,7 @@ export default function ChapterDetailPage() {
             {/* Line Connect */}
             {chapter.quizType === "line-connect" && (
               <div>
-                <h2 className="font-serif text-xl font-bold text-[#3e2723] mb-2 text-center">
+                <h2 className="font-poppins text-xl font-bold text-[#3e2723] mb-2 text-center">
                   {chapter.quizTitle}
                 </h2>
                 <p className="text-sm text-[#5d4037] mb-6 opacity-80">
@@ -477,10 +555,16 @@ export default function ChapterDetailPage() {
                                 : "border-[#3e2723] bg-[#e8d4b0]"
                           }`}
                         >
-                          <span className="text-xs font-bold text-[#3e2723] text-center">{item.term}</span>
+                          <span className="text-xs font-bold text-[#3e2723] text-center">
+                            {item.term}
+                          </span>
                           {isMatched && (
                             <span className="absolute right-[-10px] top-10 rounded-full border border-[#e8d4b0] bg-[#3e2723] p-1">
-                              <svg className="w-3 h-3 text-[#e8d4b0]" fill="currentColor" viewBox="0 0 20 20">
+                              <svg
+                                className="w-3 h-3 text-[#e8d4b0]"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
                                 <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                               </svg>
                             </span>
@@ -493,16 +577,21 @@ export default function ChapterDetailPage() {
                   {/* Right Column */}
                   <div className="w-[55%] space-y-4">
                     {chapter.matchingChoices?.map((choice, idx) => {
-                      const isMatched = Object.values(connectedPairs).includes(choice);
+                      const isMatched =
+                        Object.values(connectedPairs).includes(choice);
                       return (
                         <button
                           key={idx}
                           onClick={() => handleDefinitionPress(choice)}
                           className={`w-full h-24 flex items-center justify-center rounded-lg border p-2 ${
-                            isMatched ? "border-[#3e2723] bg-[#d7ccc8]" : "border-[#3e2723]/50 bg-white"
+                            isMatched
+                              ? "border-[#3e2723] bg-[#d7ccc8]"
+                              : "border-[#3e2723]/50 bg-white"
                           }`}
                         >
-                          <p className="text-[10px] text-justify text-[#3e2723] leading-3">{choice}</p>
+                          <p className="text-[10px] text-justify text-[#3e2723] leading-3">
+                            {choice}
+                          </p>
                         </button>
                       );
                     })}
