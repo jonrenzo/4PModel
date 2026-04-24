@@ -12,17 +12,16 @@ const STEPS = [
   { number: 3, label: "Impormasyon", sublabel: "Baitang, seksyon, at papel" },
 ];
 
-function getActiveStep(formData: any, confirmPassword: string) {
+function getActiveStep(formData: any, confirmPassword: string, role: string) {
   if (!formData.name && !formData.email) return 1;
-  if (formData.name || formData.email) {
-    if (!formData.password && !confirmPassword) return 2;
-    if (formData.password || confirmPassword) return 3;
-  }
-  return 1;
+  if (!formData.password && !confirmPassword) return 2;
+  if (role === "student") return 3;
+  return 2;
 }
 
 export default function RegisterPage() {
   const router = useRouter();
+  const [role, setRole] = useState<"student" | "teacher">("student");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -41,7 +40,7 @@ export default function RegisterPage() {
     setMounted(true);
   }, []);
 
-  const activeStep = getActiveStep(formData, formData.confirmPassword);
+  const activeStep = getActiveStep(formData, formData.confirmPassword, role);
 
   const isStepDone = (n: number) => {
     if (n === 1) return !!formData.name.trim() && !!formData.email.trim();
@@ -75,7 +74,7 @@ export default function RegisterPage() {
       setLoading(false);
       return;
     }
-    if (!formData.classCode.trim()) {
+    if (role === "student" && !formData.classCode.trim()) {
       setError("Kinakailangan ang class code upang makapag-register.");
       setLoading(false);
       return;
@@ -83,18 +82,22 @@ export default function RegisterPage() {
 
     const supabase = createClient();
 
-    // Validate class code via server API (bypasses RLS for unauthenticated users)
-    const classRes = await fetch(
-      `/api/validate-class?code=${encodeURIComponent(formData.classCode.trim())}`
-    );
+    let classData: { id: string; name: string } | null = null;
 
-    if (!classRes.ok) {
-      setError("Hindi mahanap ang klase. Suriin ang iyong class code.");
-      setLoading(false);
-      return;
+    if (role === "student") {
+      // Validate class code via server API (bypasses RLS for unauthenticated users)
+      const classRes = await fetch(
+        `/api/validate-class?code=${encodeURIComponent(formData.classCode.trim())}`
+      );
+
+      if (!classRes.ok) {
+        setError("Hindi mahanap ang klase. Suriin ang iyong class code.");
+        setLoading(false);
+        return;
+      }
+
+      classData = await classRes.json();
     }
-
-    const classData: { id: string; name: string } = await classRes.json();
 
     // Sign up
     const { data, error: signupError } = await supabase.auth.signUp({
@@ -103,8 +106,8 @@ export default function RegisterPage() {
       options: {
         data: {
           name: formData.name.trim(),
-          role: "student",
-          class_id: classData.id,
+          role: role,
+          class_id: classData ? classData.id : null,
         },
       },
     });
@@ -127,9 +130,9 @@ export default function RegisterPage() {
         body: JSON.stringify({
           userId: data.user.id,
           name: formData.name.trim(),
-          classId: classData.id,
-          className: classData.name,
-          role: "student",
+          classId: classData ? classData.id : null,
+          className: classData ? classData.name : null,
+          role: role,
         }),
       });
 
@@ -138,7 +141,11 @@ export default function RegisterPage() {
         // We still alert success for auth, but warn about profile
       }
 
-      alert(`Matagumpay na nakarehistro! Ikaw ay naka-enroll sa klase: ${classData.name}`);
+      if (role === "student") {
+        alert(`Matagumpay na nakarehistro! Ikaw ay naka-enroll sa klase: ${classData?.name}`);
+      } else {
+        alert("Matagumpay na nakarehistro bilang Guro!");
+      }
       router.push("/login");
     }
   };
@@ -471,7 +478,7 @@ export default function RegisterPage() {
                 margin: "36px 0",
               }}
             >
-              {STEPS.map((step) => {
+              {(role === "teacher" ? STEPS.slice(0, 2) : STEPS).map((step) => {
                 const done = isStepDone(step.number);
                 const active = !done && activeStep === step.number;
                 return (
@@ -597,6 +604,56 @@ export default function RegisterPage() {
               </div>
             </div>
 
+            {/* Role toggle */}
+            <div style={{ marginBottom: 24 }}>
+              <p
+                style={{
+                  fontFamily: "Cormorant Garamond, serif",
+                  fontSize: "0.78rem",
+                  letterSpacing: "0.16em",
+                  textTransform: "uppercase",
+                  color: "#6b3a2a",
+                  marginBottom: 10,
+                }}
+              >
+                Magrehistro bilang
+              </p>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  border: "1px solid #c9a96e",
+                  borderRadius: 4,
+                  overflow: "hidden",
+                }}
+              >
+                {(["student", "teacher"] as const).map((r) => (
+                  <button
+                    key={r}
+                    type="button"
+                    onClick={() => setRole(r)}
+                    style={{
+                      padding: "11px 0",
+                      fontFamily: "Cormorant Garamond, serif",
+                      fontSize: "0.9rem",
+                      fontWeight: 600,
+                      letterSpacing: "0.1em",
+                      textTransform: "capitalize",
+                      cursor: "pointer",
+                      border: "none",
+                      transition: "all 0.2s ease",
+                      background: role === r ? "#4f2b21" : "#fdf8f0",
+                      color: role === r ? "#f5e6c8" : "#7a5c4a",
+                      borderRight:
+                        r === "student" ? "1px solid #c9a96e" : "none",
+                    }}
+                  >
+                    {r === "student" ? "Mag-aaral" : "Guro"}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Form fields */}
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               {/* Section 1 */}
@@ -709,31 +766,35 @@ export default function RegisterPage() {
               </div>
 
               {/* Section 3 */}
-              <div className="section-rule form-row">Klase</div>
+              {role === "student" && (
+                <>
+                  <div className="section-rule form-row">Klase</div>
 
-              <div className="form-row">
-                <label className="field-label">Class Code</label>
-                <input
-                  type="text"
-                  placeholder="Hal. ABC123"
-                  value={formData.classCode}
-                  onChange={(e) =>
-                    setFormData({ ...formData, classCode: e.target.value.toUpperCase() })
-                  }
-                  className="parchment-input"
-                  style={{ textTransform: "uppercase", letterSpacing: "0.15em" }}
-                  required
-                />
-                <p style={{
-                  fontFamily: "EB Garamond, serif",
-                  fontStyle: "italic",
-                  fontSize: "0.8rem",
-                  color: "#9e7c5c",
-                  marginTop: 6,
-                }}>
-                  Humingi ng class code sa iyong guro.
-                </p>
-              </div>
+                  <div className="form-row">
+                    <label className="field-label">Class Code</label>
+                    <input
+                      type="text"
+                      placeholder="Hal. ABC123"
+                      value={formData.classCode}
+                      onChange={(e) =>
+                        setFormData({ ...formData, classCode: e.target.value.toUpperCase() })
+                      }
+                      className="parchment-input"
+                      style={{ textTransform: "uppercase", letterSpacing: "0.15em" }}
+                      required={role === "student"}
+                    />
+                    <p style={{
+                      fontFamily: "EB Garamond, serif",
+                      fontStyle: "italic",
+                      fontSize: "0.8rem",
+                      color: "#9e7c5c",
+                      marginTop: 6,
+                    }}>
+                      Humingi ng class code sa iyong guro.
+                    </p>
+                  </div>
+                </>
+              )}
 
               {error && <div className="form-row error-box">{error}</div>}
 

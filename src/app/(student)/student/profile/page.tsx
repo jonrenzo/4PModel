@@ -169,7 +169,6 @@ export default function ProfilePage() {
           </div>
           <h2 className="font-bold text-2xl text-[#4a342e]">{studentName}</h2>
           <p className="text-[#4a342e] opacity-70">
-            {profile?.role === "teacher" ? "Guro" : "Mag-aaral"} -{" "}
             {profile?.grade || "-"} - {profile?.section || "-"}
           </p>
         </div>

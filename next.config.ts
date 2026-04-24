@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const nextConfig = {
+const nextConfig: NextConfig = {
   experimental: {
     turbo: {
       rules: {
@@ -9,6 +9,23 @@ const nextConfig = {
         },
       },
     },
+  },
+  async headers() {
+    return [
+      {
+        source: "/(.*).apk",
+        headers: [
+          {
+            key: "Content-Type",
+            value: "application/vnd.android.package-archive",
+          },
+          {
+            key: "Content-Disposition",
+            value: "attachment",
+          },
+        ],
+      },
+    ];
   },
 };
 
