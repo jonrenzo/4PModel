@@ -631,7 +631,7 @@ export default function LoginPage() {
                 }}
               >
                 <a
-                  href="/p4model.apk"
+                  href="/p4Modelv2.apk"
                   download
                   style={{
                     display: "flex",
