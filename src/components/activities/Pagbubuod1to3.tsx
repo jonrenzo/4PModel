@@ -4,11 +4,34 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase";
 
 const rubric = [
-  { label: "Pag-unawa sa Wakas", points: "5" },
-  { label: "Pagpili ng Mahahalagang Detalye", points: "5" },
-  { label: "Kaayusan ng Pagkakasulat", points: "5" },
-  { label: "Kalinawan ng Kaisipan", points: "5" },
-  { label: "Wastong Gamit ng Wika", points: "5" },
+  {
+    label: "Pag-unawa sa Wakas",
+    label_inst:
+      "Naipakita ang malinaw at wastong pag-unawa sa mahahalagang pangyayari sa wakas ng Noli Me Tangere",
+    points: "5",
+  },
+  {
+    label: "Pagpili ng Mahahalagang Detalye",
+    label_inst:
+      "Natampok lamang ang pinakamahahalagang pangyayari; hindi lumabis sa hinihinging bilang ng pangungusap.",
+    points: "5",
+  },
+  {
+    label: "Kaayusan ng Pagkakasulat",
+    label_inst:
+      "Malinaw, lohikal, at organisado ang pagkakasunod-sunod ng mga pangungusap.",
+    points: "5",
+  },
+  {
+    label: "Kalinawan ng Kaisipan",
+    label_inst: "Malinaw at madaling maunawaan ang ipinahahayag na kaisipan",
+    points: "5",
+  },
+  {
+    label: "Wastong Gamit ng Wika",
+    label_inst: "Tama ang gramatika, baybay, at bantas",
+    points: "5",
+  },
 ];
 
 export default function Pagbubuod1to3({ rangeId }: { rangeId: string }) {
@@ -113,7 +136,10 @@ export default function Pagbubuod1to3({ rangeId }: { rangeId: string }) {
         </h2>
       </div>
       <p className="mb-3 text-xs text-[#5d4037]">
-        Sumulat ng maikling buod (hanggang 10 pangungusap) mula sa Kabanata 1-3.
+        <span className="font-bold">Panuto:</span> Sumulat ng isang maikling
+        buod tungkol sa isa(1) hanggang tatlo(3) mula sa nobelang Noli Me
+        Tangere. Tiyakin na ang iyong buod ay malinaw,organisado, at binubuo
+        lamang ng hindi hihigit sa sampung(10) pangungusap
       </p>
       <textarea
         className="w-full min-h-[120px] rounded-xl border border-[#c4b09a] bg-white p-3 text-xs text-[#3e2723] mb-3 focus:outline-none focus:border-[#8d6e63]"
@@ -133,8 +159,8 @@ export default function Pagbubuod1to3({ rangeId }: { rangeId: string }) {
             key={i}
             className={`flex text-xs border-t border-[#c4b09a] ${i % 2 === 0 ? "bg-[#efede6]" : "bg-[#f5ede0]"}`}
           >
-            <div className="flex-1 p-2 border-r border-[#c4b09a] text-[#3e2723]">
-              {row.label}
+            <div className="flex-1 p-2 border-r border-[#c4b09a] text-[#3e2723] font-bold">
+              {row.label} <span className="font-light">- {row.label_inst}</span>
             </div>
             <div className="w-16 p-2 text-center font-semibold text-[#3e2723]">
               {row.points}
@@ -152,7 +178,7 @@ export default function Pagbubuod1to3({ rangeId }: { rangeId: string }) {
         {saving && <span className="text-xs text-[#8d6e63]">Sine-save...</span>}
         {saved && (
           <span className="text-xs text-[#5d4037] font-semibold">
-            ✓ Nai-save na!
+            ✓ Naipasa na!
           </span>
         )}
         <button
