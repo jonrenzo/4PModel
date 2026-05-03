@@ -160,7 +160,7 @@ export default function Pagbubuod1to3({ rangeId }: { rangeId: string }) {
           className="flex-1 rounded-full bg-[#3e2723] py-2 hover:bg-[#5d4037] transition-colors"
         >
           <span className="font-bold text-[#e8d4b0] text-sm">
-            I-save ang Buod
+            Ipasa ang Buod
           </span>
         </button>
       </div>

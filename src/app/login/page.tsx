@@ -499,7 +499,7 @@ export default function LoginPage() {
                     marginBottom: 6,
                   }}
                 >
-                  Pumasok sa iyong account
+                  Pumasok sa iyong Akawnt
                 </h2>
                 <div className="divider" style={{ margin: "14px 0 0" }}>
                   <div className="divider-diamond" />

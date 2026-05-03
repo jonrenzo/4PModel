@@ -20,7 +20,11 @@ export default function TeacherDashboard() {
   const [classes, setClasses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [modalState, setModalState] = useState<{ type: 'none' | 'confirm' | 'error', classId?: string, className?: string }>({ type: 'none' });
+  const [modalState, setModalState] = useState<{
+    type: "none" | "confirm" | "error";
+    classId?: string;
+    className?: string;
+  }>({ type: "none" });
   const router = useRouter();
 
   useEffect(() => {
@@ -88,20 +92,23 @@ export default function TeacherDashboard() {
     }
 
     if (count && count > 0) {
-      setModalState({ type: 'error', classId: cls.id, className: cls.name });
+      setModalState({ type: "error", classId: cls.id, className: cls.name });
     } else {
-      setModalState({ type: 'confirm', classId: cls.id, className: cls.name });
+      setModalState({ type: "confirm", classId: cls.id, className: cls.name });
     }
   };
 
   const confirmDelete = async () => {
     if (!modalState.classId) return;
     const supabase = createClient();
-    const { error } = await supabase.from("classes").delete().eq("id", modalState.classId);
+    const { error } = await supabase
+      .from("classes")
+      .delete()
+      .eq("id", modalState.classId);
     if (!error) {
       setClasses(classes.filter((c) => c.id !== modalState.classId));
     }
-    setModalState({ type: 'none' });
+    setModalState({ type: "none" });
   };
 
   if (loading) {
@@ -511,14 +518,18 @@ export default function TeacherDashboard() {
                     {String(i + 1).padStart(2, "0")}
                   </span>
 
-                  <button className="delete-btn" onClick={() => handleDeleteClick(cls)} title="Burahin ang Klase">
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDeleteClick(cls)}
+                    title="Burahin ang Klase"
+                  >
                     <Trash2 size={14} />
                   </button>
 
                   <div className="class-name">{cls.name}</div>
 
                   <div className="invite-row">
-                    <span className="invite-label">Invite Code</span>
+                    <span className="invite-label">Kodigo ng Paanyaya</span>
                     <span className="invite-code">{cls.invite_code}</span>
                     <button
                       className={`copy-btn ${copiedId === cls.id ? "copied" : ""}`}
@@ -561,46 +572,59 @@ export default function TeacherDashboard() {
         </main>
 
         {/* Modals */}
-        {modalState.type !== 'none' && (
+        {modalState.type !== "none" && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60">
             <div className="bg-[#f5ede0] rounded-2xl shadow-2xl max-w-sm w-full p-6 border border-[#c4b09a] relative">
               <button
-                onClick={() => setModalState({ type: 'none' })}
+                onClick={() => setModalState({ type: "none" })}
                 className="absolute top-4 right-4 text-[#8d6e63] hover:text-[#3e2723]"
               >
                 <X size={18} />
               </button>
               <div className="flex items-center gap-3 mb-4">
-                <div className={`p-2 rounded-xl ${modalState.type === 'error' ? 'bg-[#ffebeb]' : 'bg-[#fff4e5]'}`}>
-                  {modalState.type === 'error' ? (
+                <div
+                  className={`p-2 rounded-xl ${modalState.type === "error" ? "bg-[#ffebeb]" : "bg-[#fff4e5]"}`}
+                >
+                  {modalState.type === "error" ? (
                     <AlertCircle size={24} className="text-[#d32f2f]" />
                   ) : (
                     <Trash2 size={24} className="text-[#ed6c02]" />
                   )}
                 </div>
                 <h3 className="text-base font-bold text-[#3e2723]">
-                  {modalState.type === 'error' ? 'Hindi Maaaring Burahin' : 'Kumpirmasyon'}
+                  {modalState.type === "error"
+                    ? "Hindi Maaaring Burahin"
+                    : "Kumpirmasyon"}
                 </h3>
               </div>
               <p className="text-sm text-[#5d4037] mb-6 leading-relaxed">
-                {modalState.type === 'error' ? (
+                {modalState.type === "error" ? (
                   <>
-                    Ang klaseng <span className="font-bold text-[#3e2723]">{modalState.className}</span> ay may mga estudyante pa. Kailangan munang maging blangko ang klase bago ito mabura.
+                    Ang klaseng{" "}
+                    <span className="font-bold text-[#3e2723]">
+                      {modalState.className}
+                    </span>{" "}
+                    ay may mga estudyante pa. Kailangan munang maging blangko
+                    ang klase bago ito mabura.
                   </>
                 ) : (
                   <>
-                    Sigurado ka bang nais mong burahin ang klaseng <span className="font-bold text-[#3e2723]">{modalState.className}</span>? Hindi na ito maibabalik pa.
+                    Sigurado ka bang nais mong burahin ang klaseng{" "}
+                    <span className="font-bold text-[#3e2723]">
+                      {modalState.className}
+                    </span>
+                    ? Hindi na ito maibabalik pa.
                   </>
                 )}
               </p>
               <div className="flex gap-3">
                 <button
-                  onClick={() => setModalState({ type: 'none' })}
+                  onClick={() => setModalState({ type: "none" })}
                   className="flex-1 px-4 py-2.5 rounded-xl border border-[#c4b09a] text-[#5d4037] text-sm font-semibold hover:bg-[#ede0d4] transition-colors"
                 >
-                  {modalState.type === 'error' ? 'Isara' : 'Kanselahin'}
+                  {modalState.type === "error" ? "Isara" : "Kanselahin"}
                 </button>
-                {modalState.type === 'confirm' && (
+                {modalState.type === "confirm" && (
                   <button
                     onClick={confirmDelete}
                     className="flex-1 px-4 py-2.5 rounded-xl bg-[#d32f2f] text-white text-sm font-bold hover:bg-[#b71c1c] transition-colors flex items-center justify-center gap-2"

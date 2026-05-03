@@ -20,8 +20,8 @@ const menuItems = [
   { href: "/student", icon: Home, label: "Home" },
   { href: "/student/characters", icon: Users, label: "Mga Tauhan" },
   { href: "/student/activities", icon: ClipboardList, label: "Mga Gawain" },
-  { href: "/student/profile", icon: User, label: "Profile" },
-  { href: "/student/about", icon: Info, label: "Tungkol sa App" },
+  { href: "/student/profile", icon: User, label: "Propayl" },
+  { href: "/student/about", icon: Info, label: "Tungkol sa Aplikasyon" },
 ];
 
 export default function Sidebar() {
@@ -32,7 +32,9 @@ export default function Sidebar() {
 
   useEffect(() => {
     const fetchClass = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) return;
       const { data: profile } = await supabase
         .from("profiles")
@@ -56,7 +58,11 @@ export default function Sidebar() {
       {/* Logo Section */}
       <div className="p-6 border-b border-[#5d4037] flex flex-col items-center">
         <div className="w-24 h-24 rounded-full bg-[#efede6] flex items-center justify-center overflow-hidden border border-[#5d4037] mb-3">
-          <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
+          <img
+            src="/logo.png"
+            alt="Logo"
+            className="w-full h-full object-contain"
+          />
         </div>
         <h1
           className="text-center text-white"
@@ -70,7 +76,9 @@ export default function Sidebar() {
         {className && (
           <div className="mt-3 flex items-center justify-center gap-1.5 rounded-full bg-[#5d4037] px-3 py-1.5">
             <GraduationCap size={12} className="text-[#d4af37]" />
-            <span className="text-xs font-medium text-[#e8d4b0] truncate">{className}</span>
+            <span className="text-xs font-medium text-[#e8d4b0] truncate">
+              {className}
+            </span>
           </div>
         )}
       </div>
@@ -109,4 +117,3 @@ export default function Sidebar() {
     </div>
   );
 }
-

@@ -225,7 +225,7 @@ export default function Paghihinuha4to6({ rangeId }: { rangeId: string }) {
           onClick={save}
           className="flex-1 rounded-full bg-[#3e2723] py-2"
         >
-          <span className="font-bold text-white text-sm">I-save</span>
+          <span className="font-bold text-white text-sm">Ipasa</span>
         </button>
       </div>
     </div>

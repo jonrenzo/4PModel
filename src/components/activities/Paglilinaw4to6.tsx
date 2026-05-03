@@ -262,9 +262,9 @@ export default function Paglilinaw4to6({ rangeId }: { rangeId: string }) {
       {/* Instructions */}
       <div className="mb-4 rounded-xl border border-[#c4b09a] bg-[#efede6] p-3">
         <p className="text-xs text-[#5d4037]">
-          <span className="font-bold">Panuto:</span> I-click ang dice para
-          mag-roll at makakuha ng random na numero. Sagutin ang tanong na
-          katapat ng numerong lumabas!
+          <span className="font-bold">Panuto:</span> Pindutin ang dice para
+          gumulong at makakuha ng alinmang numero. Sagutin ang tanong na katapat
+          ng numerong lumabas!
         </p>
       </div>
 
@@ -285,7 +285,7 @@ export default function Paglilinaw4to6({ rangeId }: { rangeId: string }) {
             ? "🎉 Tapos na!"
             : isRolling
               ? "Nag-ro-roll..."
-              : "I-click ang dice para mag-roll!"}
+              : "Pindutin ang dice para gumulong!"}
         </p>
       </div>
 

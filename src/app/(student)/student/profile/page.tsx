@@ -184,7 +184,7 @@ export default function ProfilePage() {
             />
           </div>
           <p className="mt-1 text-right text-xs text-gray-500">
-            {readProgress.read} out of {readProgress.total} na kabanata ang
+            {readProgress.read} mula sa {readProgress.total} na kabanata ang
             nabasa
           </p>
         </div>
@@ -198,7 +198,7 @@ export default function ProfilePage() {
             />
           </div>
           <p className="mt-1 text-right text-xs text-gray-500">
-            {talasalitaanAnswers.length} out of {totalQuestions} na nasagutan
+            {talasalitaanAnswers.length} mula sa {totalQuestions} na nasagutan
           </p>
         </div>
 

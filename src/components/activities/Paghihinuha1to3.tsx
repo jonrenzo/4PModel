@@ -238,7 +238,7 @@ export default function Paghihinuha1to3({ rangeId }: { rangeId: string }) {
       {/* Instructions */}
       <div className="mb-3 rounded-xl border border-[#c4b09a] bg-[#efede6] p-3">
         <p className="text-xs text-[#5d4037]">
-          Pindutin ang pindutan para kunin ang karakter. Magbigay ng hinuha
+          Pindutin ang "simulan" para kunin ang karakter. Magbigay ng hinuha
           tungkol sa kanyang papel sa nobela.
         </p>
       </div>
@@ -300,7 +300,7 @@ export default function Paghihinuha1to3({ rangeId }: { rangeId: string }) {
               <>
                 <Search size={24} className="text-[#d4af37]" />
                 <span className="text-xs text-[#e8d4b0] font-bold mt-1">
-                  {availableCharacters.length === 0 ? "TAPOS" : "SIMULA"}
+                  {availableCharacters.length === 0 ? "TAPOS" : "SIMULAN"}
                 </span>
               </>
             )}
@@ -365,7 +365,7 @@ export default function Paghihinuha1to3({ rangeId }: { rangeId: string }) {
                     onClick={handleSaveAnswer}
                     className="flex-1 py-2 rounded-full bg-[#3e2723] text-sm font-bold text-[#e8d4b0] hover:bg-[#5d4037] transition-colors"
                   >
-                    I-save
+                    Ipasa
                   </button>
                 </div>
               </div>

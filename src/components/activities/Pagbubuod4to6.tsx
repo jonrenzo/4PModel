@@ -4,11 +4,36 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase";
 
 const rubric = [
-  { label: "Pagkilala sa Pangunahing Ideya", points: "5" },
-  { label: "Pagluhanay ng Mahahalagang Pangyayari", points: "5" },
-  { label: "Pagiging Komprehensibo", points: "5" },
-  { label: "Kaayusan at Kalinawan", points: "5" },
-  { label: "Gamit ng Wika", points: "5" },
+  {
+    label: "Pagkilala sa Pangunahing Ideya",
+    label_inst:
+      "Malinaw na naipakita ang pangunahing mensahe ng kabanata batay sa ibinigay na emoji; hindi nalilihis sa sentral na tema.",
+    points: "5 puntos",
+  },
+  {
+    label: "Pagluhanay ng Mahahalagang Pangyayari",
+    label_inst:
+      "Kumpleto at lohikal ang pagkakasunod-sunod ng mahahalagang pangyayari; walang labis na detalye.",
+    points: "5 puntos",
+  },
+  {
+    label: "Pagiging Komprehensibo",
+    label_inst:
+      "Napanatili ang kabuuang saysay ng kabanata sa pinaikling paraan; hindi sumobra sa detalye at hindi naglalaman ng personal na opinyon.",
+    points: "5 puntos",
+  },
+  {
+    label: "Kaayusan at Kalinawan",
+    label_inst:
+      "Malinaw, organisado, at madaling basahin ang buod; may maayos na daloy ng ideya.",
+    points: "5 puntos",
+  },
+  {
+    label: "Gamit ng Wika",
+    label_inst:
+      "Wastong baybay, bantas, at gramatika; malinaw ang mga pangungusap.",
+    points: "5 puntos",
+  },
 ];
 
 export default function Pagbubuod4to6({ rangeId }: { rangeId: string }) {
@@ -114,11 +139,19 @@ export default function Pagbubuod4to6({ rangeId }: { rangeId: string }) {
         </h2>
       </div>
       <p className="mb-3 text-xs text-[#5d4037]">
-        Sumulat ng buod (4-6 pangungusap) mula sa Kabanata 4-6. 📜🏠😲🤫
+        <span className="font-bold">Panuto:</span> Basahing mabuti ang
+        itinakdang kabanata mula sa Nobelang Noli Me Tangere. Gamit ang mga
+        emoji, sumulat ng isang maikling buod na binubuo ng apat (4) hanggang
+        anim (6) na pangungusap.
+        <br />
+        <br /> Tiyaking malinaw na nakasaad ang pangunahing ideya, mahahalagang
+        pangyayari, at tamang pagkakasunod-sunod ng mga ito. Iwasan ang
+        paglalagay ng labis na detalye, sariling opinyon, o komentaryo; ibatay
+        lamang ang sagot sa mismong nilalaman ng kabanata.
       </p>
       <textarea
-        className="w-full min-h-[120px] rounded-xl border-2 border-black p-3 text-xs mb-3"
-        placeholder="Simulan dito..."
+        className="w-full min-h-30 rounded-xl border-2 border-black p-3 text-xs mb-3"
+        placeholder="📜🏠😟👨‍🦳💬🔥😮👥"
         value={summary}
         onChange={(e) => setSummary(e.target.value)}
       />
@@ -130,7 +163,9 @@ export default function Pagbubuod4to6({ rangeId }: { rangeId: string }) {
         </div>
         {rubric.map((row, i) => (
           <div key={i} className="flex text-xs border-t border-black">
-            <div className="flex-1 p-2 border-r border-black">{row.label}</div>
+            <div className="flex-1 p-2 border-r border-black font-bold">
+              {row.label} <span className="font-light">- {row.label_inst}</span>
+            </div>
             <div className="w-16 p-2 text-center bg-[#efede6]">
               {row.points}
             </div>
@@ -138,7 +173,7 @@ export default function Pagbubuod4to6({ rangeId }: { rangeId: string }) {
         ))}
         <div className="flex bg-[#d7ccc8] text-xs font-bold">
           <div className="flex-1 p-2 border-r border-black">Kabuuan</div>
-          <div className="w-16 p-2 text-center">25</div>
+          <div className="w-16 p-2 text-center">25 puntos</div>
         </div>
       </div>
       <div className="flex items-center gap-2">
@@ -148,7 +183,7 @@ export default function Pagbubuod4to6({ rangeId }: { rangeId: string }) {
           onClick={save}
           className="flex-1 rounded-full bg-[#3e2723] py-2"
         >
-          <span className="font-bold text-white text-sm">I-save ang Buod</span>
+          <span className="font-bold text-white text-sm">Ipasa ang Buod</span>
         </button>
       </div>
     </div>

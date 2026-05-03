@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, BookOpen, Save } from "lucide-react";
 import Link from "next/link";
@@ -37,6 +37,43 @@ export default function ChapterDetailPage() {
   }>({});
   const [selectedTerm, setSelectedTerm] = useState<number | null>(null);
   const [user, setUser] = useState<any>(null);
+
+  // Refs for line-connect quiz
+  const containerRef = useRef<HTMLDivElement>(null);
+  const termRefs = useRef<{ [key: number]: HTMLButtonElement | null }>({});
+  const definitionRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+  const [lines, setLines] = useState<
+    { x1: number; y1: number; x2: number; y2: number }[]
+  >([]);
+
+  const calculateLines = useCallback(() => {
+    if (!containerRef.current) return;
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const newLines: { x1: number; y1: number; x2: number; y2: number }[] = [];
+
+    Object.entries(connectedPairs).forEach(([termIdStr, definition]) => {
+      const termId = Number(termIdStr);
+      const termEl = termRefs.current[termId];
+      const defEl = definitionRefs.current[definition];
+      if (termEl && defEl) {
+        const termRect = termEl.getBoundingClientRect();
+        const defRect = defEl.getBoundingClientRect();
+        newLines.push({
+          x1: termRect.right - containerRect.left,
+          y1: termRect.top + termRect.height / 2 - containerRect.top,
+          x2: defRect.left - containerRect.left,
+          y2: defRect.top + defRect.height / 2 - containerRect.top,
+        });
+      }
+    });
+    setLines(newLines);
+  }, [connectedPairs]);
+
+  useEffect(() => {
+    calculateLines();
+    window.addEventListener("resize", calculateLines);
+    return () => window.removeEventListener("resize", calculateLines);
+  }, [calculateLines]);
 
   useEffect(() => {
     const getUser = async () => {
@@ -537,7 +574,23 @@ export default function ChapterDetailPage() {
                   {chapter.quizInstructions}
                 </p>
 
-                <div className="flex justify-between gap-4">
+                <div ref={containerRef} className="flex justify-between gap-4 relative">
+                  {/* SVG overlay for lines */}
+                  <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
+                    {lines.map((line, idx) => (
+                      <line
+                        key={idx}
+                        x1={line.x1}
+                        y1={line.y1}
+                        x2={line.x2}
+                        y2={line.y2}
+                        stroke="#3e2723"
+                        strokeWidth="2"
+                        strokeDasharray="6 4"
+                      />
+                    ))}
+                  </svg>
+
                   {/* Left Column */}
                   <div className="w-[40%] space-y-4">
                     {chapter.quiz.map((item) => {
@@ -546,8 +599,11 @@ export default function ChapterDetailPage() {
                       return (
                         <button
                           key={item.id}
+                          ref={(el) => {
+                            termRefs.current[item.id] = el;
+                          }}
                           onClick={() => handleTermPress(item.id)}
-                          className={`w-full h-24 flex items-center justify-center rounded-lg border-2 p-3 ${
+                          className={`w-full h-24 flex items-center justify-center rounded-lg border-2 p-3 relative ${
                             isMatched
                               ? "border-[#3e2723] bg-[#d7ccc8]"
                               : isSelected
@@ -582,6 +638,9 @@ export default function ChapterDetailPage() {
                       return (
                         <button
                           key={idx}
+                          ref={(el) => {
+                            definitionRefs.current[choice] = el;
+                          }}
                           onClick={() => handleDefinitionPress(choice)}
                           className={`w-full h-24 flex items-center justify-center rounded-lg border p-2 ${
                             isMatched
@@ -605,7 +664,7 @@ export default function ChapterDetailPage() {
               className="w-full mt-8 rounded-lg bg-[#8d6e63] py-3 text-white font-bold"
             >
               <Save size={18} className="inline mr-2" />
-              I-save ang Sagot
+              Ipasa ang Sagot
             </button>
           </div>
         ) : (
